@@ -4,7 +4,6 @@
 textures:
     data_image:
         url: sample4.png
-        #https://rawgit.com/tangrams/WeatherOverTime/gh-pages/data/data.png
         filtering: nearest
 
 styles:
@@ -41,19 +40,19 @@ styles:
                           st.y = 1.-st.y/texHeigth;
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
-                color: |
-                  color.rgb = vec3(color.r, (1.0 - color.r), 0.);
+                # color: |
+                #   vec3 pos = worldPosition().xyz*0.005;
+                #   color.rgb = vec3(, (1.0 - pos.b), 0.);
                 position: |
                     float t = mod(u_time, u_param.x);
-                    vec3 pos = worldPosition().xyz;
                     float i_now = floor(t);
                     float next = i_now+1.;
-                    vec4 data_now = getColor(vec2(i_now, pos.z));
+                    vec4 data_now = getColor(vec2(i_now, position.z));
                     if (position.z > 0.) {
                         position.xyz = vec3(
                             position.x,
                             position.y,
-                            data_now.g);
+                            (data_now.r + data_now.g + data_now.b)*5000.);
                     }
 
 
@@ -69,7 +68,7 @@ sources:
       url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
     dong:
         type: GeoJSON
-        url: ./pop3.geojson
+        url: ./pop4.geojson
 
 layers:
     earth:
@@ -104,5 +103,6 @@ layers:
 
                 extrude: |
                   function () {
-                    return 2;
+
+                    return (parseFloat(feature.id) - 1.0);
                   }
