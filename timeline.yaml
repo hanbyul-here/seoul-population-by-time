@@ -1,0 +1,108 @@
+# import:
+#   - https://www.nextzen.org/carto/refill-style/11/refill-style.zip
+#   - https://www.nextzen.org/carto/refill-style/themes/color-zinc.zip
+textures:
+    data_image:
+        url: sample4.png
+        #https://rawgit.com/tangrams/WeatherOverTime/gh-pages/data/data.png
+        filtering: nearest
+
+styles:
+    buildings:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            defines:
+                TWO_PI: 6.283185307
+                PI: 3.1415926535897932384626433832795
+                HALF_PI: 1.5707963267948966192313216916398
+            uniforms:
+                u_data: data_image
+                u_param: [528, 363]
+                u_offset: 0
+            blocks:
+                global: |
+                      float getIndex (vec2 encodedIndex) {
+                          return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                      }
+
+                      float shape(vec2 st, int N){
+                          st = st *2.-1.;
+                          float a = atan(st.x,st.y)+PI;
+                          float r = TWO_PI/float(N);
+                          return cos(floor(.5+a/r)*r-a)*length(st);
+                      }
+                      vec4 getColor (vec2 st) {
+                          float texWidth = u_param.x;
+                          float texHeigth = u_param.y;
+                          st.y = 1.-st.y/texHeigth;
+                          return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                      }
+                color: |
+                  color.rgb = vec3(color.r, (1.0 - color.r), 0.);
+                position: |
+                    float t = mod(u_time, u_param.x);
+                    vec3 pos = worldPosition().xyz;
+                    float i_now = floor(t);
+                    float next = i_now+1.;
+                    vec4 data_now = getColor(vec2(i_now, pos.z));
+                    if (position.z > 0.) {
+                        position.xyz = vec3(
+                            position.x,
+                            position.y,
+                            data_now.g);
+                    }
+
+
+global:
+    currentTime: 2018042316
+
+cameras:
+    camera1:
+        type: isometric
+sources:
+    nextzen_vector_tile:
+      type: MVT
+      url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
+    dong:
+        type: GeoJSON
+        url: ./pop3.geojson
+
+layers:
+    earth:
+      data: { source: nextzen_vector_tile }
+      draw:
+          polygons:
+              color: "#ddd"
+              order: 0
+    water:
+      data: { source: nextzen_vector_tile }
+      draw:
+          polygons:
+              color: "#6666ff"
+              order: 1
+    roads:
+      data: { source: nextzen_vector_tile }
+      draw:
+          lines:
+              order: 4
+              color: '#ffffff'
+              width: [[7,0.0px], [10, .5px], [15, .75px], [17, 5m]]
+    starbucks:
+        data: { source: dong }
+        draw:
+            buildings:
+                order: 3000
+                color: |
+                  function () {
+                    var redCol = parseFloat(feature.population[global.currentTime])/ 10000;
+                    return [redCol, 0, 0];
+                  }
+
+                extrude: |
+                  function () {
+                    return 2;
+                  }
