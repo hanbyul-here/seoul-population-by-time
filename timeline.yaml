@@ -3,11 +3,18 @@
 #   - https://www.nextzen.org/carto/refill-style/themes/color-zinc.zip
 textures:
     data_image:
-        url: sample4.png
+        url: real_total_data.png
         filtering: nearest
+sources:
+    nextzen_vector_tile:
+      type: MVT
+      url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
+    dong:
+        type: GeoJSON
+        url: ./real_final_total_population_int.geojson
 
 styles:
-    buildings:
+    dongStyle:
         base: polygons
         animated: true
         material:
@@ -20,12 +27,12 @@ styles:
                 HALF_PI: 1.5707963267948966192313216916398
             uniforms:
                 u_data: data_image
-                u_param: [528, 363]
-                u_offset: 0
+                u_param: [528, 424]
+                u_offset: 0.
             blocks:
                 global: |
                       float getIndex (vec2 encodedIndex) {
-                          return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
                       }
 
                       float shape(vec2 st, int N){
@@ -37,38 +44,27 @@ styles:
                       vec4 getColor (vec2 st) {
                           float texWidth = u_param.x;
                           float texHeigth = u_param.y;
-                          st.y = 1.-st.y/texHeigth;
+                          st.y = 1.-(st.y/texHeigth);
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
-                # color: |
-                #   vec3 pos = worldPosition().xyz*0.005;
-                #   color.rgb = vec3(, (1.0 - pos.b), 0.);
+                color: |
+                  float yIndex = getIndex(color.xy);
+                  vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
+                  float cData = (colorData.r+colorData.g+colorData.b)/3.0;
+                  color.rgb = vec3(cData, (0.5 - cData/2.), 7.0);
                 position: |
-                    float t = mod(u_time, u_param.x);
-                    float i_now = floor(t);
-                    float next = i_now+1.;
-                    vec4 data_now = getColor(vec2(i_now, position.z));
-                    if (position.z > 0.) {
-                        position.xyz = vec3(
-                            position.x,
-                            position.y,
-                            (data_now.r + data_now.g + data_now.b)*5000.);
-                    }
+                    float zz = (position.z + .5);
+                    vec4 sampleData = getColor(vec2(mod(u_offset, u_param.x) , mod(zz, u_param.y)));
+                    position.z = ceil(position.z /500.);
+                    position.z *= (sampleData.r + sampleData.g  + sampleData.b)*3000.;
 
 
 global:
-    currentTime: 2018042316
+    currentTime: 2018041800
 
 cameras:
     camera1:
         type: isometric
-sources:
-    nextzen_vector_tile:
-      type: MVT
-      url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
-    dong:
-        type: GeoJSON
-        url: ./pop4.geojson
 
 layers:
     earth:
@@ -90,19 +86,23 @@ layers:
               order: 4
               color: '#ffffff'
               width: [[7,0.0px], [10, .5px], [15, .75px], [17, 5m]]
-    starbucks:
+    dong:
         data: { source: dong }
         draw:
-            buildings:
+            dongStyle:
+                interactive: true
                 order: 3000
                 color: |
                   function () {
-                    var redCol = parseFloat(feature.population[global.currentTime])/ 10000;
-                    return [redCol, 0, 0];
+                    return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
                   }
-
                 extrude: |
                   function () {
-
-                    return (parseFloat(feature.id) - 1.0);
+                    return feature.id;
                   }
+            text:
+                text_source: id
+                offset: [0, 20]
+                font:
+                    fill: black
+                    size: 12px
