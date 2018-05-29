@@ -54,9 +54,19 @@ styles:
                   color.rgb = vec3(cData, (0.5 - cData/2.), 7.0);
                 position: |
                     float zz = (position.z + .5);
-                    vec4 sampleData = getColor(vec2(mod(u_offset, u_param.x) , mod(zz, u_param.y)));
+
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
                     position.z = ceil(position.z /500.);
-                    position.z *= (sampleData.r + sampleData.g  + sampleData.b)*3000.;
+
+                    position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
 
 
 global:
@@ -77,7 +87,7 @@ layers:
       data: { source: nextzen_vector_tile }
       draw:
           polygons:
-              color: "#6666ff"
+              color: "#aaa"
               order: 1
     roads:
       data: { source: nextzen_vector_tile }
@@ -100,9 +110,9 @@ layers:
                   function () {
                     return feature.id;
                   }
-            text:
-                text_source: id
-                offset: [0, 20]
-                font:
-                    fill: black
-                    size: 12px
+            # text:
+            #     text_source: id
+            #     offset: [0, 20]
+            #     font:
+            #         fill: black
+            #         size: 12px

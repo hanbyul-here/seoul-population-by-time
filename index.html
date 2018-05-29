@@ -102,7 +102,7 @@
     var map = L.map('map');
 
 
-    map.setView([37.58451, 126.96939], 15);
+    map.setView([37.58451, 126.96939], 12);
 
     var tangramLayer = Tangram.leafletLayer({
       scene: {
@@ -128,7 +128,7 @@
       var nameColElem = document.createElement('td');
       var valueColElem = document.createElement('td');
 
-      nameColElem.textContent = getDisplayText(currentTime);
+      // nameColElem.textContent = getDisplayText(currentTime);
       valueColElem.textContent = obj[currentTime];
 
       tableRowElem.appendChild(nameColElem);
@@ -172,10 +172,10 @@
         updateTangram(slidingAnimValue);
         currentTime = times[slidingAnimValue];
         // tangramLayer.scene.config.global.currentTime = times[slidingAnimValue];
-         timeH.textContent = getDisplayText(times[slidingAnimValue]);
+         timeH.textContent = getDisplayText(times[Math.floor(slidingAnimValue)]);
         // tangramLayer.scene.updateConfig().then (function () {
           if (slidingAnimValue < dateSliderMax) {
-            slidingAnimValue++;
+            slidingAnimValue+=0.1;
             // animate(slid, timeH);
           } //s
           else {
@@ -188,11 +188,10 @@
     var setAnimation = function(slid, timeH) {
       setInterval(function() {
         animate(slid,timeH)
-      }, 500);
+      }, 50);
     }
 
     var updateTangram = function(idx) {
-      console.log(idx)
       tangramLayer.scene.styles.dongStyle.shaders.uniforms.u_offset = idx;
     }
 
@@ -212,7 +211,7 @@
       noUiSlider.create(sliderDiv, {
         start: 0,
         connect: true,
-        step: 1,
+        step: 0.1,
         tooltips: false,
         range: {
           'min': dateSliderMin,
