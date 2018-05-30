@@ -3,7 +3,7 @@
 #   - https://www.nextzen.org/carto/refill-style/themes/color-zinc.zip
 textures:
     data_image:
-        url: real_total_data.png
+        url: real_total_data_recent.png
         filtering: nearest
 sources:
     nextzen_vector_tile:
@@ -11,8 +11,10 @@ sources:
       url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
     dong:
         type: GeoJSON
-        url: ./real_final_total_population_int.geojson
-
+        url: ./real_final_total_population_int_recent.geojson
+    dong_outline:
+        type: GeoJSON
+        url: ./real_final_all_dongs.geojson
 styles:
     dongStyle:
         base: polygons
@@ -21,25 +23,14 @@ styles:
             ambient: 1.0
             diffuse: 1.0
         shaders:
-            defines:
-                TWO_PI: 6.283185307
-                PI: 3.1415926535897932384626433832795
-                HALF_PI: 1.5707963267948966192313216916398
             uniforms:
                 u_data: data_image
-                u_param: [528, 424]
+                u_param: [168, 424]
                 u_offset: 0.
             blocks:
                 global: |
                       float getIndex (vec2 encodedIndex) {
                         return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
-                      }
-
-                      float shape(vec2 st, int N){
-                          st = st *2.-1.;
-                          float a = atan(st.x,st.y)+PI;
-                          float r = TWO_PI/float(N);
-                          return cos(floor(.5+a/r)*r-a)*length(st);
                       }
                       vec4 getColor (vec2 st) {
                           float texWidth = u_param.x;
@@ -51,10 +42,9 @@ styles:
                   float yIndex = getIndex(color.xy);
                   vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
                   float cData = (colorData.r+colorData.g+colorData.b)/3.0;
-                  color.rgb = vec3(cData, (0.5 - cData/2.), 7.0);
+                  color.rgb = vec3(cData, (0.5 - cData/2.), 1.0);
                 position: |
-                    float zz = (position.z + .5);
-
+                    float zz = (position.z - .5);
                     float t = u_offset;
                     float i_now = floor(t);
                     float f_now = fract(t);
@@ -64,8 +54,8 @@ styles:
                     vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
                     vec4 data_interpol = mix(data_now,data_next,f_now);
 
-                    position.z = ceil(position.z /500.);
 
+                    position.z = ceil(position.z /500.);
                     position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
 
 
@@ -96,19 +86,27 @@ layers:
               order: 4
               color: '#ffffff'
               width: [[7,0.0px], [10, .5px], [15, .75px], [17, 5m]]
+    dongoutline:
+        data: { source: dong_outline }
+        draw:
+            lines:
+                order: 29
+                width: 3px
+                color: '#aaa'
+            # text:
     dong:
         data: { source: dong }
         draw:
             dongStyle:
                 interactive: true
-                order: 3000
+                order: 30
                 color: |
                   function () {
                     return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
                   }
                 extrude: |
                   function () {
-                    return feature.id;
+                    return (feature.id + 1) ;
                   }
             # text:
             #     text_source: id
