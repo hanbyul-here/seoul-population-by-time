@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Starbucks In Korea</title>
+  <title>서울생활인구 · Population by time in Seoul</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
   integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
@@ -20,13 +20,23 @@
     width: 100%;
     height: 100%;
   }
-  button {
-    width: 100%;
-    margin-bottom: 20px;
+  
+  .f-left {
+    float: left;
+  }
+
+  button#play, button#pause {
+    width: 60px;
+    padding: 10px 5px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  #timeLabel {
+
   }
   .container {
     width: 300px;
-    padding: 10px 20px 40px 20px;
+    padding: 10px 20px 10px 20px;
     background-color: white;
   }
   .slider-wrapper {
@@ -35,6 +45,9 @@
   /* noUISlider override */
   .noUi-horizontal {
     height: 10px;
+  }
+  .noUi-pips-horizontal {
+    height: 0;
   }
   .noUi-horizontal .noUi-handle {
     height: 20px;
@@ -46,29 +59,7 @@
     background: #ccc;
     outline: 1px solid #333;
   }
-  /* I am so lazy, let's just use the slider as legend */
-  .scale-slider-wrapper .noUi-base {
-    background-image: linear-gradient(
-                        to right,
-                        /*rgb(255,255,178),
-                        rgb(255,255,178) 25%,*/
-                        rgb(254,217,118),
-                        rgb(254,217,118) 25%,
-                        rgb(254,178,76) 25%,
-                        rgb(254,178,76) 50%,
-                        rgb(253,141,60) 50%,
-                        rgb(253,141,60) 75%,
-                        rgb(252,78,42) 75%,
-                        rgb(252,78,42)
-      /*                  rgb(227,26, 28) 62.5%,
-                        rgb(227,26, 28) 75%,
-                        rgb(177,0,38)*/
-                      );
-  }
-  .scale-slider-wrapper .noUi-connect {
-    background: transparent;
-    outline: 1px solid #333;
-  }
+
   h3 {
     margin-top: 0;
   }
@@ -98,75 +89,84 @@
 
     var currentTime = times[0];
 
+    function initMap() {
+      window.map = L.map('map');
 
-    var map = L.map('map');
+      map.setView([37.58451, 126.96939], 12);
 
-    map.setView([37.58451, 126.96939], 12);
-
-    var tangramLayer = Tangram.leafletLayer({
-      scene: {
-        import: './timeline.yaml',
-        global: {
-          minDateRange: dateSliderMin,
-          maxDateRange: dateSliderMax,
+      window.tangramLayer = Tangram.leafletLayer({
+        scene: {
+          import: './timeline.yaml',
+          global: {
+            minDateRange: dateSliderMin,
+            maxDateRange: dateSliderMax,
+         }
+       },
+       events: {
+         click: function(selection) {
+           onTangramClick(selection)
+         }
        }
-     },
-     events: {
-       click: function(selection) {
-         onTangramClick(selection)
-       }
-     }
-    })
+      })
 
-    tangramLayer.addTo(map)
-
-    var makeCurrentPopulationTr = function(obj) {
-      var tableRowElem = document.createElement('tr');
-      var nameColElem = document.createElement('td');
-      var valueColElem = document.createElement('td');
-
-      var currentTime = times[Math.floor(slidingAnimValue)];
-
-      var currentString = times[currentTime];
-
-      nameColElem.textContent = getDisplayText(currentTime);
-      valueColElem.textContent = obj[currentTime];
-
-      tableRowElem.appendChild(nameColElem);
-      tableRowElem.appendChild(valueColElem);
-      return tableRowElem;
+      tangramLayer.addTo(map)
     }
 
-    var jsonToTable = function (obj) {
-      var wrapperTableElem = document.createElement('table');
-      wrapperTableElem.classList.add('feature-table');
-      for (var key in obj) {
-          if (key !== 'population') {
-            var tableRowElem = document.createElement('tr');
-            var nameColElem = document.createElement('td');
-            var valueColElem = document.createElement('td');
-            nameColElem.textContent = key;
-            valueColElem.textContent = obj[key];
-            tableRowElem.appendChild(nameColElem);
-            tableRowElem.appendChild(valueColElem);
-            wrapperTableElem.appendChild(tableRowElem);
+    var PopupPanel = (function () {
+        function makeCurrentPopulationTr(obj) {
+          var tableRowElem = document.createElement('tr');
+          var nameColElem = document.createElement('td');
+          var valueColElem = document.createElement('td');
+
+          var currentTime = times[Math.floor(slidingAnimValue)];
+
+          var currentString = times[currentTime];
+
+          nameColElem.textContent = getDisplayText(currentTime);
+          valueColElem.textContent = obj[currentTime];
+
+          tableRowElem.appendChild(nameColElem);
+          tableRowElem.appendChild(valueColElem);
+          return tableRowElem;
         }
-      }
-      var populationElem = makeCurrentPopulationTr(obj['population']);
-      wrapperTableElem.appendChild(populationElem);
-      return wrapperTableElem;
-    }
+
+        function jsonToTable(obj) {
+          var wrapperTableElem = document.createElement('table');
+          wrapperTableElem.classList.add('feature-table');
+          for (var key in obj) {
+              if (key !== 'population') {
+                var tableRowElem = document.createElement('tr');
+                var nameColElem = document.createElement('td');
+                var valueColElem = document.createElement('td');
+                nameColElem.textContent = key;
+                valueColElem.textContent = obj[key];
+                tableRowElem.appendChild(nameColElem);
+                tableRowElem.appendChild(valueColElem);
+                wrapperTableElem.appendChild(tableRowElem);
+            }
+          }
+          var populationElem = makeCurrentPopulationTr(obj['population']);
+          wrapperTableElem.appendChild(populationElem);
+          return wrapperTableElem;
+        }
+
+        return {
+          jsonToTable: jsonToTable
+        }
+
+    })();
+
 
     var onTangramClick = function (selection) {
       if (selection.feature) {
         var popup = L.popup()
                   .setLatLng(selection.leaflet_event.latlng)
-                  .setContent(jsonToTable(selection.feature.properties))
+                  .setContent(PopupPanel.jsonToTable(selection.feature.properties))
                   .openOn(map);
       }
     }
 
-    var first = false;
+
     var animate = function (slid, timeH) {
         // slid.set(slidingAnimValue);
         console.log(slidingAnimValue);
@@ -182,7 +182,7 @@
     }
 
     var setAnimation = function(slid, timeH) {
-      setInterval(function() {
+      window.intervalID = setInterval(function() {
         animate(slid,timeH)
       }, 50);
     }
@@ -191,13 +191,18 @@
       tangramLayer.scene.styles.dongStyle.shaders.uniforms.u_offset = idx;
     }
 
+
+
     var sliderControl = L.control({position: 'topright'});
 
     sliderControl.onAdd = function () {
       var containerDiv = L.DomUtil.create('div', 'container');
       var titleH = L.DomUtil.create('h3');
       titleH.textContent = 'Populations in Seoul';
-      var timeH = L.DomUtil.create('h4');
+      var timeH = L.DomUtil.create('h3');
+      timeH.id = 'timeLabel';
+      timeH.classList.add('f-left')
+      timeH.textContent = getDisplayText(times[0]);
 
       var sliderDiv = L.DomUtil.create('div', 'slider-wrapper');
       var dateLabel = L.DomUtil.create('label');
@@ -230,16 +235,27 @@
       });
 
 
-      var scaleLabel = L.DomUtil.create('label');
-      scaleLabel.innerHTML = 'Scale(<a href="https://en.wikipedia.org/wiki/Mercalli_intensity_scale">MI</a>)';
-
 
       var playButton = L.DomUtil.create('button');
+      playButton.id = 'play';
+      playButton.classList.add('f-left');
       playButton.textContent = 'play';
+      
+      var pauseButton = L.DomUtil.create('button');
+      pauseButton.id = 'pause';
+      pauseButton.classList.add('f-left');
+      pauseButton.textContent = 'pause';
+
+
 
       playButton.onclick = function () {
         slidingAnimValue = 0;
+        console.log("?")
         setAnimation(sliderDiv.noUiSlider, timeH);
+      }
+
+      pauseButton.onclick = function () {
+        if(window.intervalID) clearInterval(intervalID);
       }
 
       sliderDiv.noUiSlider.on('change', function ( values, handle ) {
@@ -253,12 +269,13 @@
       L.DomEvent.disableClickPropagation(containerDiv);
 
       containerDiv.appendChild(titleH);
-      containerDiv.appendChild(playButton);
+      
       containerDiv.appendChild(dateLabel);
       containerDiv.appendChild(sliderDiv);
+      containerDiv.appendChild(playButton);
+      containerDiv.appendChild(pauseButton);
       containerDiv.appendChild(timeH);
-
-
+      
       return containerDiv;
     }
 
@@ -266,8 +283,12 @@
       return s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + '  '+ s[8]+s[9]+'시';
     }
 
-    sliderControl.addTo(map);
 
+
+
+    // 
+    initMap();
+    sliderControl.addTo(map);
 
   </script>
 </body>
