@@ -32,7 +32,7 @@
     cursor: pointer;
   }
   #timeLabel {
-
+    margin-top: 5px;
   }
   .container {
     width: 300px;
@@ -97,6 +97,7 @@
                           if(timeString.length < 2) timeString = '0' + timeString;
                           return dayRange[dayIndex].toString() + timeString;
                         });
+    var dayWords = '월화수목금토일';
 
     var slidingAnimValue = 0;
 
@@ -197,8 +198,6 @@
     }
 
     var setAnimation = function(timeSlider, daySlider, timeH) {
-      console.log(daySlider.noUiSlider.get())
-
       slidingAnimValue = totalTimeRange.indexOf(currentDayTime);
       updateTangram(slidingAnimValue);
       if(!window.IntervalID) {
@@ -219,7 +218,7 @@
     sliderControl.onAdd = function () {
       var containerDiv = L.DomUtil.create('div', 'container');
       var titleH = L.DomUtil.create('h3');
-      titleH.textContent = 'Populations by time in Seoul';
+      titleH.textContent = '서울생활인구 Populations by time in Seoul';
       var timeH = L.DomUtil.create('h3');
       timeH.id = 'timeLabel';
       timeH.classList.add('f-left')
@@ -346,7 +345,7 @@
     }
 
     function getDisplayText(s) {
-      return s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + '  '+ s[8]+s[9]+'시';
+      return s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + '  '+ s[8]+s[9]+'시'+ ' ' + dayWords[currentDayIndex]+'요일';
     }
 
 
