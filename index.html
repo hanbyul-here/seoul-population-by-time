@@ -174,24 +174,38 @@
     }
 
 
-    var animate = function (slid, timeH) {
-        // slid.set(slidingAnimValue);
-        console.log(slidingAnimValue);
+    var animate = function (timeSlider, daySlider, timeH) {
         updateTangram(slidingAnimValue);
         currentDayTime = totalTimeRange[Math.floor(slidingAnimValue)];
-         timeH.textContent = getDisplayText(currentDayTime);
-          if (slidingAnimValue < totalTimeRange.length) {
-            slidingAnimValue+=0.1;
-          }
-          else {
-            slidingAnimValue = 0;
-          }
+        timeH.textContent = getDisplayText(currentDayTime);
+
+        var integerSlidingVal = Math.round(slidingAnimValue);
+        if (Math.abs(slidingAnimValue - integerSlidingVal) < 0.00001 ) {
+          timeSlider.noUiSlider.set(integerSlidingVal%timeUnit);
+          daySlider.noUiSlider.set(Math.floor(integerSlidingVal/timeUnit));
+          currentDayIndex = Math.floor(integerSlidingVal/timeUnit);
+          currentTimeIndex = integerSlidingVal%timeUnit;
+          currentDayTime = totalTimeRange[getTimeIndex(currentDayIndex, currentTimeIndex)];
+
+        }
+
+        if (slidingAnimValue < totalTimeRange.length) {
+          slidingAnimValue+=0.1;
+        } else {
+          slidingAnimValue = 0;
+        }
     }
 
-    var setAnimation = function(slid, timeH) {
-      window.intervalID = setInterval(function() {
-        animate(slid,timeH)
-      }, 50);
+    var setAnimation = function(timeSlider, daySlider, timeH) {
+      console.log(daySlider.noUiSlider.get())
+
+      slidingAnimValue = totalTimeRange.indexOf(currentDayTime);
+      updateTangram(slidingAnimValue);
+      if(!window.IntervalID) {
+        window.intervalID = setInterval(function() {
+          animate(timeSlider, daySlider, timeH)
+        }, 50);
+      }
     }
 
     var updateTangram = function(idx) {
@@ -286,7 +300,7 @@
 
 
       playButton.onclick = function () {
-        setAnimation(timeSliderDiv.noUiSlider, timeH);
+        setAnimation(timeSliderDiv, daySliderDiv, timeH);
       }
 
       pauseButton.onclick = function () {
