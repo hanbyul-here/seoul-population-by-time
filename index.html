@@ -37,7 +37,7 @@
   .container {
     width: 300px;
     padding: 10px 20px 10px 20px;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.7);
   }
   .slider-wrapper {
     margin-bottom: 40px;
@@ -176,8 +176,15 @@
 
 
     var animate = function (timeSlider, daySlider, timeH) {
+
+        if (slidingAnimValue < totalTimeRange.length) {
+          slidingAnimValue+=0.1;
+        } else {
+          slidingAnimValue = 0;
+        }
         updateTangram(slidingAnimValue);
         currentDayTime = totalTimeRange[Math.floor(slidingAnimValue)];
+        console.log(currentDayTime)
         timeH.textContent = getDisplayText(currentDayTime);
 
         var integerSlidingVal = Math.round(slidingAnimValue);
@@ -190,28 +197,22 @@
 
         }
 
-        if (slidingAnimValue < totalTimeRange.length) {
-          slidingAnimValue+=0.1;
-        } else {
-          slidingAnimValue = 0;
-        }
     }
 
+
     var setAnimation = function(timeSlider, daySlider, timeH) {
-      slidingAnimValue = totalTimeRange.indexOf(currentDayTime);
-      updateTangram(slidingAnimValue);
-      if(!window.IntervalID) {
+      if(!window.intervalID) {
+        slidingAnimValue = totalTimeRange.indexOf(currentDayTime);
+        updateTangram(slidingAnimValue);
         window.intervalID = setInterval(function() {
           animate(timeSlider, daySlider, timeH)
-        }, 50);
+        }, 10);
       }
     }
 
     var updateTangram = function(idx) {
       tangramLayer.scene.styles.dongStyle.shaders.uniforms.u_offset = idx;
     }
-
-
 
     var sliderControl = L.control({position: 'topright'});
 
@@ -303,14 +304,16 @@
       }
 
       pauseButton.onclick = function () {
-        if(window.intervalID) clearInterval(intervalID);
+        if(window.intervalID) {
+          clearInterval(window.intervalID);
+          window.intervalID = null;
+        }
       }
 
       timeSliderDiv.noUiSlider.on('change', function ( values, handle ) {
         let idx = Math.round(values[handle]);
         currentTimeIndex = idx;
         currentDayTime = totalTimeRange[getTimeIndex(currentDayIndex, currentTimeIndex)];
-        console.log(currentTimeIndex)
         updateTangram(totalTimeRange.indexOf(currentDayTime));
         timeH.textContent = getDisplayText(currentDayTime);
       });
@@ -339,6 +342,10 @@
 
       return containerDiv;
     }
+
+
+
+
 
     function getTimeIndex(d, t) {
       return (d*24 + t);
