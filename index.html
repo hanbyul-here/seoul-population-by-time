@@ -78,33 +78,6 @@
   <script src="https://unpkg.com/tangram@0.15.1/dist/tangram.min.js"></script>
   <script src="https://rawgit.com/leongersen/noUiSlider/master/distribute/nouislider.js"></script>
   <script>
-    var timeUnit = 24;
-    // This only works because it is not in between months
-    var startingDate = 20180514;
-    var endingDate = 20180520;
-
-    var dayUnit = 7;
-
-    var timeRange = Array(timeUnit).fill().map((f,idx) => idx);
-    var dayRange = Array(dayUnit).fill().map((f,idx) => { return (startingDate + idx)});
-
-    var totalTimeRange = Array(timeUnit * dayUnit)
-                        .fill()
-                        .map((f,idx) => {
-                          var dayIndex = Math.floor(idx/timeUnit);
-                          var timeIndex = Math.floor(idx%timeUnit)
-                          var timeString = timeRange[timeIndex].toString();
-                          if(timeString.length < 2) timeString = '0' + timeString;
-                          return dayRange[dayIndex].toString() + timeString;
-                        });
-    var dayWords = '월화수목금토일';
-
-    var slidingAnimValue = 0;
-
-
-    var currentDayIndex = 0;
-    var currentTimeIndex = 0;
-    var currentDayTime = totalTimeRange[0];
 
     function initMap() {
       window.map = L.map('map');
@@ -175,175 +148,206 @@
     }
 
 
-    var animate = function (timeSlider, daySlider, timeH) {
 
-        if (slidingAnimValue < totalTimeRange.length) {
-          slidingAnimValue+=0.1;
-        } else {
-          slidingAnimValue = 0;
+
+
+    var timeUnit = 24;
+    // This only works because it is not in between months
+    var startingDate = 20180514;
+    var endingDate = 20180520;
+
+    var dayUnit = 7;
+
+    var timeRange = Array(timeUnit).fill().map((f,idx) => idx);
+    var dayRange = Array(dayUnit).fill().map((f,idx) => { return (startingDate + idx)});
+
+    var totalTimeRange = Array(timeUnit * dayUnit)
+                        .fill()
+                        .map((f,idx) => {
+                          var dayIndex = Math.floor(idx/timeUnit);
+                          var timeIndex = Math.floor(idx%timeUnit)
+                          var timeString = timeRange[timeIndex].toString();
+                          if(timeString.length < 2) timeString = '0' + timeString;
+                          return dayRange[dayIndex].toString() + timeString;
+                        });
+    var dayWords = '월화수목금토일';
+
+    var slidingAnimValue = 0;
+
+
+    var currentDayIndex = 0;
+    var currentTimeIndex = 0;
+    var currentDayTime = totalTimeRange[0];
+
+    var SliderControl = L.Control.extend({
+      initialize: function(opts) {
+        this.options = L.Util.setOptions(this, opts);
+      },
+
+      onAdd: function(map) {
+        var containerDiv = L.DomUtil.create('div', 'container');
+        var titleH = L.DomUtil.create('h3');
+        titleH.textContent = '서울생활인구 Populations by time in Seoul';
+        var timeH = L.DomUtil.create('h3');
+        timeH.id = 'timeLabel';
+        timeH.classList.add('f-left')
+        timeH.textContent = getDisplayText(totalTimeRange[0]);
+
+        var timeSliderDiv = L.DomUtil.create('div', 'slider-wrapper');
+        var dateLabel = L.DomUtil.create('label');
+        dateLabel.textContent = '시간';
+        timeSliderDiv.id = 'tileSlider';
+
+        var daySliderDiv = L.DomUtil.create('div', 'slider-wrapper');
+        var dayLabel = L.DomUtil.create('label');
+        dayLabel.textContent = '일';
+        daySliderDiv.id = 'daySlider';
+
+        noUiSlider.create(timeSliderDiv, {
+          start: 0,
+          connect: true,
+          step: 1,
+          tooltips: false,
+          range: {
+            'min': 0,
+            'max': 23
+          },
+          format: {
+            to: function (value) {
+              return value;
+            },
+            from: function (value) {
+              return value;
+            }
+          },
+          pips: { // Show a scale with the slider
+            mode: 'positions',
+            stepped: true,
+            density: 20,
+            values: [0,25,50,75,100]
+          }
+        });
+
+
+        noUiSlider.create(daySliderDiv, {
+          start: 0,
+          connect: true,
+          step: 1,
+          tooltips: false,
+          range: {
+            'min': 0,
+            'max': 6
+          },
+          format: {
+            to: function (value) {
+              return value;
+            },
+            from: function (value) {
+              return value;
+            }
+          },
+          pips: { // Show a scale with the slider
+            mode: 'positions',
+            stepped: true,
+            density: 100/7,
+            values: [0,100]
+          }
+        });
+
+
+        var playButton = L.DomUtil.create('button');
+        playButton.id = 'play';
+        playButton.classList.add('f-left');
+        playButton.textContent = 'play';
+
+        var pauseButton = L.DomUtil.create('button');
+        pauseButton.id = 'pause';
+        pauseButton.classList.add('f-left');
+        pauseButton.textContent = 'pause';
+
+
+        var self = this;
+        playButton.onclick = function () {
+          self.setAnimation(timeSliderDiv, daySliderDiv, timeH);
         }
-        updateTangram(slidingAnimValue);
-        currentDayTime = totalTimeRange[Math.floor(slidingAnimValue)];
-        console.log(currentDayTime)
-        timeH.textContent = getDisplayText(currentDayTime);
 
-        var integerSlidingVal = Math.round(slidingAnimValue);
-        if (Math.abs(slidingAnimValue - integerSlidingVal) < 0.00001 ) {
-          timeSlider.noUiSlider.set(integerSlidingVal%timeUnit);
-          daySlider.noUiSlider.set(Math.floor(integerSlidingVal/timeUnit));
-          currentDayIndex = Math.floor(integerSlidingVal/timeUnit);
-          currentTimeIndex = integerSlidingVal%timeUnit;
+        pauseButton.onclick = function () {
+          if(window.intervalID) {
+            clearInterval(window.intervalID);
+            window.intervalID = null;
+          }
+        }
+
+        timeSliderDiv.noUiSlider.on('change', function ( values, handle ) {
+          let idx = Math.round(values[handle]);
+          currentTimeIndex = idx;
           currentDayTime = totalTimeRange[getTimeIndex(currentDayIndex, currentTimeIndex)];
+          self.updateTangram(totalTimeRange.indexOf(currentDayTime));
+          timeH.textContent = getDisplayText(currentDayTime);
+        });
 
-        }
+        daySliderDiv.noUiSlider.on('change', function ( values, handle ) {
+          let idx = Math.floor(values[handle]);
+          currentDayIndex = idx;
+          currentDayTime = totalTimeRange[getTimeIndex(currentDayIndex, currentTimeIndex)];
+          self.updateTangram(totalTimeRange.indexOf(currentDayTime));
+          timeH.textContent = getDisplayText(currentDayTime);
+        });
 
-    }
+        L.DomEvent.disableClickPropagation(containerDiv);
 
+        containerDiv.appendChild(titleH);
 
-    var setAnimation = function(timeSlider, daySlider, timeH) {
-      if(!window.intervalID) {
-        slidingAnimValue = totalTimeRange.indexOf(currentDayTime);
-        updateTangram(slidingAnimValue);
-        window.intervalID = setInterval(function() {
-          animate(timeSlider, daySlider, timeH)
-        }, 10);
-      }
-    }
+        containerDiv.appendChild(dateLabel);
+        containerDiv.appendChild(timeSliderDiv);
 
-    var updateTangram = function(idx) {
-      tangramLayer.scene.styles.dongStyle.shaders.uniforms.u_offset = idx;
-    }
+        containerDiv.appendChild(dayLabel);
+        containerDiv.appendChild(daySliderDiv);
 
-    var sliderControl = L.control({position: 'topright'});
+        containerDiv.appendChild(playButton);
+        containerDiv.appendChild(pauseButton);
+        containerDiv.appendChild(timeH);
 
-    sliderControl.onAdd = function () {
-      var containerDiv = L.DomUtil.create('div', 'container');
-      var titleH = L.DomUtil.create('h3');
-      titleH.textContent = '서울생활인구 Populations by time in Seoul';
-      var timeH = L.DomUtil.create('h3');
-      timeH.id = 'timeLabel';
-      timeH.classList.add('f-left')
-      timeH.textContent = getDisplayText(totalTimeRange[0]);
+        return containerDiv;
+      },
 
-      var timeSliderDiv = L.DomUtil.create('div', 'slider-wrapper');
-      var dateLabel = L.DomUtil.create('label');
-      dateLabel.textContent = '시간';
-      timeSliderDiv.id = 'tileSlider';
-
-      var daySliderDiv = L.DomUtil.create('div', 'slider-wrapper');
-      var dayLabel = L.DomUtil.create('label');
-      dayLabel.textContent = '일';
-      daySliderDiv.id = 'daySlider';
-
-      noUiSlider.create(timeSliderDiv, {
-        start: 0,
-        connect: true,
-        step: 1,
-        tooltips: false,
-        range: {
-          'min': 0,
-          'max': 23
-        },
-        format: {
-          to: function (value) {
-            return value;
-          },
-          from: function (value) {
-            return value;
+      animate: function (timeSlider, daySlider, timeH) {
+          if (slidingAnimValue < totalTimeRange.length) {
+            slidingAnimValue+=0.1; //speed
+          } else {
+            slidingAnimValue = 0;
           }
-        },
-        pips: { // Show a scale with the slider
-          mode: 'positions',
-          stepped: true,
-          density: 20,
-          values: [0,25,50,75,100]
-        }
-      });
+          this.updateTangram(slidingAnimValue);
+          currentDayTime = totalTimeRange[Math.floor(slidingAnimValue)];
+          timeH.textContent = getDisplayText(currentDayTime);
 
+          var integerSlidingVal = Math.round(slidingAnimValue);
+          if (Math.abs(slidingAnimValue - integerSlidingVal) < 0.00001 ) {
+            timeSlider.noUiSlider.set(integerSlidingVal%timeUnit);
+            daySlider.noUiSlider.set(Math.floor(integerSlidingVal/timeUnit));
+            currentDayIndex = Math.floor(integerSlidingVal/timeUnit);
+            currentTimeIndex = integerSlidingVal%timeUnit;
+            currentDayTime = totalTimeRange[getTimeIndex(currentDayIndex, currentTimeIndex)];
 
-      noUiSlider.create(daySliderDiv, {
-        start: 0,
-        connect: true,
-        step: 1,
-        tooltips: false,
-        range: {
-          'min': 0,
-          'max': 6
-        },
-        format: {
-          to: function (value) {
-            return value;
-          },
-          from: function (value) {
-            return value;
           }
-        },
-        pips: { // Show a scale with the slider
-          mode: 'positions',
-          stepped: true,
-          density: 100/7,
-          values: [0,100]
+      },
+
+
+      setAnimation: function(timeSlider, daySlider, timeH) {
+        var self = this;
+        if(!window.intervalID) {
+          slidingAnimValue = totalTimeRange.indexOf(currentDayTime);
+          this.updateTangram(slidingAnimValue);
+          window.intervalID = setInterval(function() {
+            self.animate(timeSlider, daySlider, timeH)
+          }, 10);
         }
-      });
+      },
 
-
-      var playButton = L.DomUtil.create('button');
-      playButton.id = 'play';
-      playButton.classList.add('f-left');
-      playButton.textContent = 'play';
-
-      var pauseButton = L.DomUtil.create('button');
-      pauseButton.id = 'pause';
-      pauseButton.classList.add('f-left');
-      pauseButton.textContent = 'pause';
-
-
-
-      playButton.onclick = function () {
-        setAnimation(timeSliderDiv, daySliderDiv, timeH);
+      updateTangram: function(idx) {
+        tangramLayer.scene.styles.dongStyle.shaders.uniforms.u_offset = idx;
       }
-
-      pauseButton.onclick = function () {
-        if(window.intervalID) {
-          clearInterval(window.intervalID);
-          window.intervalID = null;
-        }
-      }
-
-      timeSliderDiv.noUiSlider.on('change', function ( values, handle ) {
-        let idx = Math.round(values[handle]);
-        currentTimeIndex = idx;
-        currentDayTime = totalTimeRange[getTimeIndex(currentDayIndex, currentTimeIndex)];
-        updateTangram(totalTimeRange.indexOf(currentDayTime));
-        timeH.textContent = getDisplayText(currentDayTime);
-      });
-
-      daySliderDiv.noUiSlider.on('change', function ( values, handle ) {
-        let idx = Math.floor(values[handle]);
-        currentDayIndex = idx;
-        currentDayTime = totalTimeRange[getTimeIndex(currentDayIndex, currentTimeIndex)];
-        updateTangram(totalTimeRange.indexOf(currentDayTime));
-        timeH.textContent = getDisplayText(currentDayTime);
-      });
-
-      L.DomEvent.disableClickPropagation(containerDiv);
-
-      containerDiv.appendChild(titleH);
-
-      containerDiv.appendChild(dateLabel);
-      containerDiv.appendChild(timeSliderDiv);
-
-      containerDiv.appendChild(dayLabel);
-      containerDiv.appendChild(daySliderDiv);
-
-      containerDiv.appendChild(playButton);
-      containerDiv.appendChild(pauseButton);
-      containerDiv.appendChild(timeH);
-
-      return containerDiv;
-    }
-
-
+    });
 
 
 
@@ -358,6 +362,7 @@
 
     //
     initMap();
+    var sliderControl = new SliderControl({position: 'topright'});
     sliderControl.addTo(map);
 
   </script>
