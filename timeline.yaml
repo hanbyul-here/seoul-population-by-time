@@ -3,19 +3,74 @@
 #   - https://www.nextzen.org/carto/refill-style/themes/color-zinc.zip
 textures:
     data_image:
-        url: real_total_data_recent.png
+        url: ./data/real_total_data_recent.png
+        filtering: nearest
+    female_data_image:
+        url: ./data/female_pop.png
+        filtering: nearest
+    male_data_image:
+        url: ./data/male_pop.png
+        filtering: nearest
+    age_0_image:
+        url: ./data/age0.png
+        filtering: nearest
+    age_1_image:
+        url: ./data/age1.png
+        filtering: nearest
+    age_2_image:
+        url: ./data/age2.png
+        filtering: nearest
+    age_3_image:
+        url: ./data/age3.png
+        filtering: nearest
+    age_4_image:
+        url: ./data/age4.png
+        filtering: nearest
+    age_5_image:
+        url: ./data/age5.png
         filtering: nearest
 sources:
     nextzen_vector_tile:
       type: MVT
       url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
-    dong:
-        type: GeoJSON
-        url: ./real_final_total_population_int_recent.geojson
     dong_outline:
         type: GeoJSON
-        url: ./real_final_all_dongs.geojson
+        url: ./data/dong_w_all_pop.geojson
+    hex:
+        type: GeoJSON
+        url: ./geometries/hex.geojson
+    # half_hex_0:
+    #     type: GeoJSON
+    #     url: ./geometries/half-key0.geojson
+    # half_hex_1:
+    #     type: GeoJSON
+    #     url: ./geometries/half-key1.geojson
+
+    # male_source:
+    #     type: GeoJSON
+    #     url: ./male_pop.geojson
+    # age0:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_0.geojson
+    # age1:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_1.geojson
+    # age2:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_2.geojson
+    # age3:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_3.geojson
+    # age4:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_4.geojson
+    # age5:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_5.geojson
 styles:
+    alpha_polygons:
+        base: polygons
+        blend: multiply
     dongStyle:
         base: polygons
         animated: true
@@ -38,11 +93,58 @@ styles:
                           st.y = 1.-(st.y/texHeigth);
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
+                      float random (vec2 st) {
+                          return fract(sin(dot(st.xy,
+                                               vec2(12.9898,78.233)))*
+                              43758.5453123);
+                      }
                 color: |
                   float yIndex = getIndex(color.xy);
                   vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
                   float cData = (colorData.r+colorData.g+colorData.b)/3.0;
                   color.rgb = vec3(cData, (0.5 - cData/2.), 1.0);
+                position: |
+                    vec3 pos = worldPosition().xyz;
+
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
+                    position.z = ceil(position.z /500.);
+                    position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
+    femaleStyle:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: female_data_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
+                      float getIndex (vec2 encodedIndex) {
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                      }
+                      vec4 getColor (vec2 st) {
+                          float texWidth = u_param.x;
+                          float texHeigth = u_param.y;
+                          st.y = 1.-(st.y/texHeigth);
+                          return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                      }
+                color: |
+                  float yIndex = getIndex(color.xy);
+                  vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
+                  float cData = (colorData.r+colorData.g+colorData.b)/3.0;
+                  color.rgb = vec3(cData, (1.0 - cData), cData/2.);
                 position: |
                     float zz = (position.z - .5);
                     float t = u_offset;
@@ -57,10 +159,270 @@ styles:
 
                     position.z = ceil(position.z /500.);
                     position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
+    maleStyle:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: male_data_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
+                      float getIndex (vec2 encodedIndex) {
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                      }
+                      vec4 getColor (vec2 st) {
+                          float texWidth = u_param.x;
+                          float texHeigth = u_param.y;
+                          st.y = 1.-(st.y/texHeigth);
+                          return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                      }
+                color: |
+                  float yIndex = getIndex(color.xy);
+                  vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
+                  float cData = (colorData.r+colorData.g+colorData.b)/3.0;
+                  color.rgb = vec3(cData, (0.25 - cData/4.), 0.3);
+                position: |
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
+                    position.z = ceil(position.z /500.);
+                    position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
+    age0Style:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: age_0_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
+                      float getIndex (vec2 encodedIndex) {
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                      }
+                      vec4 getColor (vec2 st) {
+                          float texWidth = u_param.x;
+                          float texHeigth = u_param.y;
+                          st.y = 1.-(st.y/texHeigth);
+                          return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                      }
+                position: |
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
+
+                    position.z = ceil(position.z /500.);
+                    position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
+    age1Style:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: age_1_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
+                      float getIndex (vec2 encodedIndex) {
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                      }
+                      vec4 getColor (vec2 st) {
+                          float texWidth = u_param.x;
+                          float texHeigth = u_param.y;
+                          st.y = 1.-(st.y/texHeigth);
+                          return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                      }
+                position: |
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
+
+                    position.z = ceil(position.z /500.);
+                    position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
+    age2Style:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: age_2_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
+                      float getIndex (vec2 encodedIndex) {
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                      }
+                      vec4 getColor (vec2 st) {
+                          float texWidth = u_param.x;
+                          float texHeigth = u_param.y;
+                          st.y = 1.-(st.y/texHeigth);
+                          return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                      }
+                position: |
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
+
+                    position.z = ceil(position.z /500.);
+                    position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
+    age3Style:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: age_3_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
+                      float getIndex (vec2 encodedIndex) {
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                      }
+                      vec4 getColor (vec2 st) {
+                          float texWidth = u_param.x;
+                          float texHeigth = u_param.y;
+                          st.y = 1.-(st.y/texHeigth);
+                          return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                      }
+                position: |
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
+
+                    position.z = ceil(position.z /500.);
+                    position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
+    age4Style:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: age_4_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
+                      float getIndex (vec2 encodedIndex) {
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                      }
+                      vec4 getColor (vec2 st) {
+                          float texWidth = u_param.x;
+                          float texHeigth = u_param.y;
+                          st.y = 1.-(st.y/texHeigth);
+                          return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                      }
+                position: |
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
+
+                    position.z = ceil(position.z /500.);
+                    position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
+    age5Style:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: age_5_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
+                      float getIndex (vec2 encodedIndex) {
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                      }
+                      vec4 getColor (vec2 st) {
+                          float texWidth = u_param.x;
+                          float texHeigth = u_param.y;
+                          st.y = 1.-(st.y/texHeigth);
+                          return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                      }
+                position: |
+                    vec3 pos = worldPosition().xyz;
+
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
+
+
+                    position.z = ceil(position.z /500.);
+                    position.z *= (data_interpol.r + data_interpol.g  + data_interpol.b)*3000.;
+
 
 
 global:
-    currentTime: 2018041800
+    currentTime: 2018051400
 
 cameras:
     camera1:
@@ -90,15 +452,19 @@ layers:
         data: { source: dong_outline }
         draw:
             lines:
+                interactive: true
                 order: 29
                 width: 3px
-                color: '#aaa'
-            # text:
+                color: '#999'
+            alpha_polygons:
+                interactive: true
+                order: 29
+                width: 3px
+                color: white
     dong:
-        data: { source: dong }
+        data: { source: hex }
         draw:
             dongStyle:
-                interactive: true
                 order: 30
                 color: |
                   function () {
@@ -107,10 +473,99 @@ layers:
                 extrude: |
                   function () {
                     return (feature.id + 1) ;
+                   }
+    female:
+        data: { source: half_hex_0 }
+        draw:
+            femaleStyle:
+                interactive: true
+                order: 30
+                color: |
+                    function () {
+                      return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
+                    }
+                extrude: |
+                  function () {
+                    return (feature.id + 1) ;
                   }
-            # text:
-            #     text_source: id
-            #     offset: [0, 20]
-            #     font:
-            #         fill: black
-            #         size: 12px
+    male:
+        data: { source: half_hex_1 }
+        draw:
+            maleStyle:
+                interactive: true
+                order: 29
+                color: |
+                    function () {
+                      return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
+                    }
+                extrude: |
+                  function () {
+                    return (feature.id + 1) ;
+                  }
+    age0:
+        data: { source: tri0 }
+        draw:
+            age0Style:
+                interactive: true
+                order: 50
+                color: 'red'
+                extrude: |
+                  function () {
+                    return (feature.id + 1) ;
+                  }
+    age1:
+        data: { source: tri1 }
+        draw:
+            age1Style:
+                interactive: true
+                order: 48
+                color: 'orange'
+                extrude: |
+                  function () {
+                    return (feature.id + 1) ;
+                  }
+
+    age2:
+        data: { source: tri2 }
+        draw:
+            age2Style:
+                interactive: true
+                order: 48
+                color: 'yellow'
+                extrude: |
+                  function () {
+                    return (feature.id + 1) ;
+                  }
+    age3:
+        data: { source: tri3 }
+        draw:
+            age3Style:
+                interactive: true
+                order: 51
+                color: 'green'
+                extrude: |
+                  function () {
+                    return (feature.id + 1) ;
+                  }
+    age4:
+        data: { source: tri4 }
+        draw:
+            age3Style:
+                interactive: true
+                order: 52
+                color: 'blue'
+                extrude: |
+                  function () {
+                    return (feature.id + 1) ;
+                  }
+    age5:
+        data: { source: tri5 }
+        draw:
+            age3Style:
+                interactive: true
+                order: 53
+                color: 'purple'
+                extrude: |
+                  function () {
+                    return (feature.id + 1) ;
+                  }
