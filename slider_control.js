@@ -198,6 +198,10 @@ var SliderControl = L.Control.extend({
     return this.currentDayTime;
   },
 
+  getIndex: function() {
+    return this.currentSlideValue;
+  },
+
   setAnimation: function(timeSlider, daySlider, timeH) {
     var self = this;
     if(!window.intervalID) {

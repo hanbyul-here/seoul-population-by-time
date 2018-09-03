@@ -195,6 +195,13 @@
       }
     }
 
+
+    initMap();
+
+    var sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
+    sliderControl.addTo(map);
+
+
     var TabControl = L.Control.extend({
       initialize: function(opts) {
         this.tangramLayer = tangramLayer;
@@ -235,7 +242,10 @@
             }
 
             self.prevTab = e;
-            self.tangramLayer.scene.updateConfig();
+            self.tangramLayer.scene.updateConfig().then(() => {
+                sliderControl.updateTangram(sliderControl.getIndex());
+            })
+
           }
 
           var tabLabel = L.DomUtil.create('label');
@@ -254,10 +264,6 @@
 
 
     //
-    initMap();
-
-    var sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
-    sliderControl.addTo(map);
 
     var ageGroupUnit = 6;
     var ageGroupData = Array(ageGroupUnit).fill().map((f,idx) => idx)
