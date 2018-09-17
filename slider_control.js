@@ -1,12 +1,13 @@
 var timeUnit = 24;
 // This only works because it is not in between months
-var startingDate = 20180514;
-var endingDate = 20180520;
+var startingDate = 20180827;
+var endingDate = 20180902;
 
 var dayUnit = 7;
 
 var timeRange = Array(timeUnit).fill().map((f,idx) => idx);
-var dayRange = Array(dayUnit).fill().map((f,idx) => { return (startingDate + idx)});
+// var dayRange = Array(dayUnit).fill().map((f,idx) => { return (startingDate + idx)});
+var dayRange = [20180827, 20180828, 20180829, 20180830, 20180831, 20180901,20180902]
 
 var totalTimeRange = Array(timeUnit * dayUnit)
                     .fill()
@@ -138,7 +139,6 @@ var SliderControl = L.Control.extend({
       self.currentTimeIndex = idx;
       self.currentSlideValue = getTimeIndex(self.currentDayIndex, self.currentTimeIndex);
       self.currentDayTime = totalTimeRange[getTimeIndex(self.currentDayIndex, self.currentTimeIndex)];
-      console.log(self.currentDayTime);
       self.updateTangram(totalTimeRange.indexOf(self.currentDayTime));
       timeH.textContent = self.getDisplayText(self.currentDayTime);
     });
@@ -172,30 +172,40 @@ var SliderControl = L.Control.extend({
 
   animate: function (timeSlider, daySlider, timeH) {
       if (this.currentSlideValue < totalTimeRange.length) {
-        this.currentSlideValue+=this.slidingSpeed; //speed
+        var newval = (this.currentSlideValue+this.slidingSpeed).toFixed(1); //speed
+        this.currentSlideValue = parseFloat(newval);
+        
       } else {
         this.currentSlideValue = 0;
       }
-      console.log(this.currentSlideValue);
       this.updateTangram(this.currentSlideValue);
-      this.currentDayTime = totalTimeRange[Math.floor(this.currentSlideValue)];
-
-      timeH.textContent = this.getDisplayText(this.currentDayTime);
+      
+      // console.log(this.currentSlideValue);
+      // var idxNumber = Math.floor(this.currentSlideValue);
+      
+      // console.log(totalTimeRange[idxNumber]);
+      // this.currentDayTime = totalTimeRange[idxNumber];
+      // console.log(this.currentDayTime);
+      
 
       var integerSlidingVal = Math.round(this.currentSlideValue);
 
-      if (Math.abs(this.currentSlideValue - integerSlidingVal) < 0.00001 ) {
+      if (Math.abs(this.currentSlideValue - integerSlidingVal) < 0.00001) {
         timeSlider.noUiSlider.set(integerSlidingVal%timeUnit);
         daySlider.noUiSlider.set(Math.floor(integerSlidingVal/timeUnit));
         this.currentDayIndex = Math.floor(integerSlidingVal/timeUnit);
         this.currentTimeIndex = integerSlidingVal%timeUnit;
-        this.currentDayTime = totalTimeRange[getTimeIndex(self.currentDayIndex, self.currentTimeIndex)];
+        this.currentDayTime = totalTimeRange[getTimeIndex(this.currentDayIndex, this.currentTimeIndex)];
+        
+        timeH.textContent = this.getDisplayText(this.currentDayTime);
 
       }
   },
 
   getNow: function () {
-    return this.currentDayTime;
+    console.log("/***** now!")
+    console.log(this.currentDayTime)
+    return Math.floor(this.currentDayTime);
   },
 
   getIndex: function() {
