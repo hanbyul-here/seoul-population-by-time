@@ -41,7 +41,7 @@ var SliderControl = L.Control.extend({
     var containerDiv = L.DomUtil.create('div', 'container');
     var titleH = L.DomUtil.create('h3');
     titleH.textContent = '서울생활인구 Populations by time in Seoul';
-    var timeH = L.DomUtil.create('h3');
+    var timeH = L.DomUtil.create('h3','time-h');
     timeH.id = 'timeLabel';
     timeH.classList.add('f-left')
     timeH.textContent = this.getDisplayText(totalTimeRange[0]);
@@ -163,9 +163,10 @@ var SliderControl = L.Control.extend({
     containerDiv.appendChild(dayLabel);
     containerDiv.appendChild(daySliderDiv);
 
+    containerDiv.appendChild(timeH);
     containerDiv.appendChild(playButton);
     containerDiv.appendChild(pauseButton);
-    containerDiv.appendChild(timeH);
+
 
     return containerDiv;
   },
@@ -174,19 +175,19 @@ var SliderControl = L.Control.extend({
       if (this.currentSlideValue < totalTimeRange.length) {
         var newval = (this.currentSlideValue+this.slidingSpeed).toFixed(1); //speed
         this.currentSlideValue = parseFloat(newval);
-        
+
       } else {
         this.currentSlideValue = 0;
       }
       this.updateTangram(this.currentSlideValue);
-      
+
       // console.log(this.currentSlideValue);
       // var idxNumber = Math.floor(this.currentSlideValue);
-      
+
       // console.log(totalTimeRange[idxNumber]);
       // this.currentDayTime = totalTimeRange[idxNumber];
       // console.log(this.currentDayTime);
-      
+
 
       var integerSlidingVal = Math.round(this.currentSlideValue);
 
@@ -196,7 +197,7 @@ var SliderControl = L.Control.extend({
         this.currentDayIndex = Math.floor(integerSlidingVal/timeUnit);
         this.currentTimeIndex = integerSlidingVal%timeUnit;
         this.currentDayTime = totalTimeRange[getTimeIndex(this.currentDayIndex, this.currentTimeIndex)];
-        
+
         timeH.textContent = this.getDisplayText(this.currentDayTime);
 
       }
