@@ -204,8 +204,6 @@ var SliderControl = L.Control.extend({
   },
 
   getNow: function () {
-    console.log("/***** now!")
-    console.log(this.currentDayTime)
     return Math.floor(this.currentDayTime);
   },
 

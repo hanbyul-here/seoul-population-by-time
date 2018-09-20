@@ -191,6 +191,7 @@
           t:'전체',
           f:'여성',
           m:'남성',
+          r: '주민등록',
           a1: '10대',
           a2: '20대',
           a3: '30대',
@@ -223,15 +224,13 @@
           nameColElem.classList.add(key);
           valueColElem.classList.add('value');
 
-          nameColElem.textContent = displayKey[key];
-          if(typeof data[key] === 'object') {
-            var newdata = data[key];
-            for(var newkey of newdata) {
-              var rowElem = makeRow(newkey, newdata);
-              valueColElem.appendChild(rowElem);
-            }
-          } else {
+
+          if(data) {
+            nameColElem.textContent = displayKey[key];
             valueColElem.textContent = data[key];
+          } else {
+            nameColElem.textContent = displayKey['r'];
+            valueColElem.textContent = key;
           }
           tableRowElem.appendChild(nameColElem);
           tableRowElem.appendChild(valueColElem);
@@ -250,11 +249,14 @@
           var timeHeader = makeCurrentTimeHeader(scopedObj);
           wrapperTableElem.appendChild(timeHeader);
 
+          var residentRow = makeRow(obj['r']);
+          console.log(residentRow)
           for (var key in scopedObj) {
               var tableRowElem = makeRow(key, scopedObj);
               wrapperTableElem.appendChild(tableRowElem);
-
           }
+          wrapperTableElem.appendChild(residentRow);
+
 
           return wrapperTableElem;
         }
@@ -268,6 +270,7 @@
 
     function onTangramClick (selection) {
       if (selection.feature) {
+        console.log(selection.feature)
         var popup = L.popup()
                   .setLatLng(selection.leaflet_event.latlng)
                   .setContent(PopupPanel.jsonToTable(selection.feature.properties))
