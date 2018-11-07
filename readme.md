@@ -1,9 +1,9 @@
 ## 서울생활인구
 
 👉 [프로젝트 바로가기](https://hanbyul-here.github.io/seoul-population-by-time/)
+👉 데이터 출처: [서울열린데이터광장/서울생활인구](http://data.seoul.go.kr/dataVisual/seoul/seoulLivingPopulation.do) 
 
-서울생활인구 프로젝트는 [서울생활인구](http://data.seoul.go.kr/dataVisual/seoul/seoulLivingPopulation.do) 데이터를 이용, 2018년 8월 27일부터 2018년 9월 2일까지 서울 특정지역, 특정시간에 존재한 인구(생활인구)를 행정구역별로 정리하여 웹지도 형태로 보여줍니다.
-
+서울생활인구 프로젝트는 2018년 8월 27일부터 2018년 9월 2일까지 서울 특정지역, 특정시간에 존재한 인구(생활인구)를 행정구역별로 정리하여 웹지도 형태로 보여줍니다.
 
 ### 프로젝트의 시작
 
