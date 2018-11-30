@@ -41,6 +41,9 @@ Weather Over Time은 기상청 데이터에 기반하여 한 달 간의 기온, 
 
 가로 * 세로 (Python code snippet과 결과 이미지)
 
+
+![생활인구 데이터 텍스쳐](https://raw.githubusercontent.com/hanbyul-here/seoul-population-by-time/master/data/20180827/total.png)
+
 ![주거인구 데이터 텍스쳐](https://raw.githubusercontent.com/hanbyul-here/seoul-population-by-time/master/data/residents.png)
 
 
