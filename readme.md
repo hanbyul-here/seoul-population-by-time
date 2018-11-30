@@ -33,13 +33,15 @@ Weather Over Time은 기상청 데이터에 기반하여 한 달 간의 기온, 
 - 데이터가 인코딩된 이미지를 해당 레이어의 셰이더에 텍스쳐로 패스한다. 
 - 브라우저내 스크립트는 셰이더 텍스처의 인덱스를 업데이트한다. 
 
+
+
 🦄 왜 셰이더를 사용하면 퍼포먼스가 눈에 띄게 개선되는지 궁금하시다면 : 프로젝트의 메인 저자인  Patrico Gonzalez Vivo가 작성한 [Book of Shader](https://thebookofshaders.com/01/)의 1 챕터를 읽어보세요!
 
 데이터 인코딩 과정을 좀 더 자세히 기록하자면 다음과 같습니다. 
 
 가로 * 세로 (Python code snippet과 결과 이미지)
 
-주거인구 (변동이 없음) 텍스쳐와 비교
+![주거인구 데이터 텍스쳐](https://raw.githubusercontent.com/hanbyul-here/seoul-population-by-time/master/data/residents.png)
 
 
 ### 자세히 보아야 예쁘다.
