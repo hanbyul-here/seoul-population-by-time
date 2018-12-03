@@ -27,7 +27,7 @@
 
 - [Weather Over Time](https://github.com/tangrams/WeatherOverTime/) by Patricio Gonzalez Vivo
 
-Weather Over Time은 기상청 데이터에 기반하여 한 달 간의 기온, 풍향, 풍속을 시각화한 프로젝트인데 서울생활인구 프로젝트를 만드는 데 필요했던 부분을 거칠게 요약하자면 다음과 같습니다.
+Weather Over Time은 기상청 데이터에 기반하여 한 달 간의 기온, 풍향, 풍속을 시각화한 프로젝트입니다. 이 프로젝트에서 필요했던 부분을 거칠게 요약하자면 다음과 같습니다.
 
 - 데이터를 파싱하여 PNG 이미지로 옮긴다. (Weather Over Time의 경우 기온을 R channel, 풍향을  G channel, 풍속을 B channel로 옮겼습니다.)
 - 데이터가 인코딩된 이미지를 해당 레이어의 셰이더에 텍스쳐로 패스한다. 
@@ -37,7 +37,9 @@ Weather Over Time은 기상청 데이터에 기반하여 한 달 간의 기온, 
 
 🦄 왜 셰이더를 사용하면 퍼포먼스가 눈에 띄게 개선되는지 궁금하시다면 : 프로젝트의 메인 저자인  Patrico Gonzalez Vivo가 작성한 [Book of Shader](https://thebookofshaders.com/01/)의 1 챕터를 읽어보세요!
 
-데이터 인코딩 과정을 좀 더 자세히 기록하자면 다음과 같습니다. 
+데이터 인코딩 과정을 서울생활인구 프로젝트에 적용한 과정을 좀 더 자세히 기록하자면 다음과 같습니다. 
+
+
 
 가로 * 세로 (Python code snippet과 결과 이미지)
 
