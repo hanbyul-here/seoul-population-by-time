@@ -96,14 +96,6 @@
     padding-top: 5px;
     padding-left: 58px;
   }
-  .legend:before {
-    content: ' ';
-    width: 8px;
-    height: 8px;
-    float: left;
-    margin-right: 5px;
-    margin-top: 4px;
-  }
 
   .legend.unit {
     width: 100px;
@@ -121,9 +113,12 @@
     margin-right: 5px;
   }
 
-  .legend-bar.dong, .legend.t:before {
+  .legend-bar.dong, .legend-bar.time_pop, .legend.t:before {
     /* This is not really exactly representing the color, */
     background-image: linear-gradient(to top, rgb(2, 126, 255), rgb(251, 0, 255));
+  }
+  .legend-bar.resident {
+    background-color: hsl(30, 80%, 50%);
   }
 
   .legend-bar.female, .legend.f:before {
@@ -380,7 +375,7 @@
         }]
       }
     ]
-    console.log(tabData)
+
     var tabControl = new TabControl({position: 'topright', tabs: tabData});
     tabControl.addTo(map);
 
