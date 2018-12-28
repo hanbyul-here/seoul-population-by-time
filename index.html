@@ -25,10 +25,14 @@
     float: left;
   }
 
-  button#play, button#pause {
+  #play,#pause {
     width: 60px;
+  }
+
+  button {
     padding: 10px 5px;
     margin-right: 5px;
+    border: 2px solid rgb(121, 119, 119);
     font-weight: bold;
     cursor: pointer;
   }
@@ -41,6 +45,17 @@
     padding: 10px 20px 10px 20px;
     background-color: rgba(255, 255, 255, 0.8);
   }
+  button.toggle {
+    display: none;
+  }
+  @media only screen and (max-width: 768px) {
+    button.toggle {
+      display: block;
+    }
+    .container, .tab-container {
+      display: none;
+    }
+}
   .slider-wrapper {
     margin-bottom: 40px;
   }
@@ -379,7 +394,7 @@
     var tabControl = new TabControl({position: 'topright', tabs: tabData});
     tabControl.addTo(map);
 
-    var legendControl = L.Control.extend({
+    var LegendControl = L.Control.extend({
       initialize: function(opts) {
         this.currentLegend='total';
        },
@@ -425,7 +440,7 @@
 
     });
 
-    var legend = new legendControl({
+    var legend = new LegendControl({
       position: 'bottomright'
     });
 
@@ -435,6 +450,45 @@
     tabControl.on('tabChange', function (e) {
       legend.update(e.value);
     })
+
+    var ToggleControl = L.Control.extend({
+      initialize: function () {
+        this.openPanel = false;
+        this.sliderControl = sliderControl.getContainer();
+        this.tabControl = tabControl.getContainer();
+        this.legendControl = legend.getContainer();
+      },
+      hide: function (elem) {
+        elem.style.display = 'none';
+      },
+      show: function (elem) {
+        elem.style.display= 'block';
+      },
+      onAdd: function () {
+        var container = L.DomUtil.create('div', 'toggle-container')
+        var button = L.DomUtil.create('button', 'toggle');
+        button.textContent = 'Open Panel';
+        var self = this;
+        button.addEventListener('click', function (e) {
+          L.DomEvent.stopPropagation(e);
+          self.openPanel = !self.openPanel;
+          button.textContent = (self.openPanel) ? 'Close Panel' : 'Open Panel';
+          if (self.openPanel) {
+            self.show(self.sliderControl)
+            self.show(self.tabControl)
+            self.show(self.legendControl)
+          } else {
+            self.hide(self.sliderControl)
+            self.hide(self.tabControl)
+            self.hide(self.legendControl)
+          }
+
+        })
+        return button;
+      }
+    })
+    var toggle = new ToggleControl();
+    toggle.addTo(map);
 
   </script>
 </body>
