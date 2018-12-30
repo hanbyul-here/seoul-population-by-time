@@ -40,7 +40,7 @@
     margin-top: 5px;
   }
 
-  .container, .tab-container {
+  .container, .whole-container, .tab-container {
     width: 300px;
     padding: 10px 20px 10px 20px;
     background-color: rgba(255, 255, 255, 0.8);
@@ -52,8 +52,11 @@
     button.toggle {
       display: block;
     }
-    .container, .tab-container {
+    .container, .slider-container, .tab-container {
       display: none;
+    }
+    .whole-container, .container, .tab-container {
+      max-width: calc(100% - 100px);
     }
 }
   .slider-wrapper {
@@ -121,6 +124,15 @@
     margin-bottom: 5px;
   }
 
+  .legend-box:before {
+     content: ' ';
+     width: 8px;
+     height: 8px;
+     float: left;
+     margin-right: 5px;
+     margin-top: 4px;
+   }
+
   .legend-bar {
     height: 30px;
     width: 15px;
@@ -128,36 +140,36 @@
     margin-right: 5px;
   }
 
-  .legend-bar.dong, .legend-bar.time_pop, .legend.t:before {
+  .legend-bar.dong, .legend-bar.time_pop, .legend-box.t:before {
     /* This is not really exactly representing the color, */
     background-image: linear-gradient(to top, rgb(2, 126, 255), rgb(251, 0, 255));
   }
-  .legend-bar.resident {
+   .legend-bar.resident, .legend-box.r:before {
     background-color: hsl(30, 80%, 50%);
   }
 
-  .legend-bar.female, .legend.f:before {
+  .legend-bar.female, .legend-box.f:before {
     background-color: rgb(294, 134, 65);
   }
-  .legend-bar.male,.legend.m:before {
+  .legend-bar.male,.legend-box.m:before {
     background-color: rgb(94, 60, 153);
   }
-  .legend-bar.age0, .legend.a1:before {
+  .legend-bar.age0, .legend-box.a1:before {
     background-color: rgb(231, 41,138);
   }
-  .legend-bar.age1,.legend.a2:before {
+  .legend-bar.age1,.legend-box.a2:before {
     background-color: rgb(217, 95,2);
   }
-  .legend-bar.age2,.legend.a3:before {
+  .legend-bar.age2,.legend-box.a3:before {
     background-color: rgb(230,171,2);
   }
-  .legend-bar.age3,.legend.a4:before {
+  .legend-bar.age3,.legend-box.a4:before {
     background-color: rgb(102,166,30);
   }
-  .legend-bar.age4,.legend.a5:before {
+  .legend-bar.age4,.legend-box.a5:before {
     background-color: rgb(27,158,119);
   }
-  .legend-bar.age5,.legend.a6:before {
+  .legend-bar.age5,.legend-box.a6:before {
     background-color:rgb(117, 112, 179);
   }
   </style>
@@ -172,6 +184,7 @@
   <script src="https://rawgit.com/leongersen/noUiSlider/master/distribute/nouislider.js"></script>
   <script src="./slider_control.js"></script>
   <script src="./tab_control.js"></script>
+  <script src="./legend_control.js"></script>
   <script>
 
     function initMap() {
@@ -230,7 +243,7 @@
           var tableRowElem = document.createElement('tr');
           var nameColElem = document.createElement('td');
           var valueColElem = document.createElement('td');
-          nameColElem.classList.add('legend');
+          nameColElem.classList.add('legend-box');
           nameColElem.classList.add(key);
           valueColElem.classList.add('value');
 
@@ -240,6 +253,7 @@
             valueColElem.textContent = data[key];
           } else {
             nameColElem.textContent = displayKey['r'];
+            nameColElem.classList.add('r');
             valueColElem.textContent = key;
           }
           tableRowElem.appendChild(nameColElem);
@@ -260,7 +274,6 @@
           wrapperTableElem.appendChild(timeHeader);
 
           var residentRow = makeRow(obj['r']);
-          console.log(residentRow)
           for (var key in scopedObj) {
               var tableRowElem = makeRow(key, scopedObj);
               wrapperTableElem.appendChild(tableRowElem);
@@ -280,7 +293,7 @@
 
     function onTangramClick (selection) {
       if (selection.feature) {
-        console.log(selection.feature)
+
         var popup = L.popup()
                   .setLatLng(selection.leaflet_event.latlng)
                   .setContent(PopupPanel.jsonToTable(selection.feature.properties))
@@ -302,13 +315,13 @@
     //
 
     var ageGroupUnit = 6;
-    var ageMinMax = [[17996, 123],[60651, 177], [52536 ,317] , [41310,338],[24896,377],[16727,298]];
+    var ageMaxMin = [[17996, 123],[60651, 177], [52536 ,317] , [41310,338],[24896,377],[16727,298]];
     var ageGroupData = Array(ageGroupUnit).fill().map((f,idx) => idx)
                     .map((f,i) => ({
                       layerName: 'age'+i,
                       sourceName: 'tri'+i,
-                      min: ageMinMax[i][1],
-                      max: ageMinMax[i][0],
+                      min: ageMaxMin[i][1],
+                      max: ageMaxMin[i][0],
                       legendTitle: (i+1)+'0대',
                       source:{
                         type: 'GeoJSON',
@@ -394,51 +407,6 @@
     var tabControl = new TabControl({position: 'topright', tabs: tabData});
     tabControl.addTo(map);
 
-    var LegendControl = L.Control.extend({
-      initialize: function(opts) {
-        this.currentLegend='total';
-       },
-
-      onAdd: function(map) {
-        this.containerDiv = L.DomUtil.create('div', 'container');
-        L.DomEvent.disableClickPropagation(this.containerDiv);
-
-        return this.containerDiv;
-      },
-
-      makeLegendUnit: function(tabD) {
-        var unitWrapper = L.DomUtil.create('div', 'legend unit');
-        var legendTitle = L.DomUtil.create('h4', 'legend-title');
-        legendTitle.textContent = tabD.legendTitle;
-
-
-        var legendBar = L.DomUtil.create('div', 'legend-bar '+ tabD.layerName);
-        var max = L.DomUtil.create('div', 'max-value');
-        max.textContent = '최대 :'+ tabD.max;
-        var min = L.DomUtil.create('div', 'min-value');
-        min.textContent = '최소 :'+ tabD.min;
-
-        unitWrapper.appendChild(legendTitle);
-        unitWrapper.appendChild(legendBar);
-
-        unitWrapper.appendChild(max);
-        unitWrapper.appendChild(min);
-
-        return unitWrapper;
-
-      },
-
-      update: function(tab) {
-        this.containerDiv.innerHTML = '';
-        this.currentLegend = tab;
-        var self = this;
-        tab.data.map((elem, i) => {
-          var legendUnitDiv = self.makeLegendUnit(elem);
-          self.containerDiv.appendChild(legendUnitDiv);
-        })
-      }
-
-    });
 
     var legend = new LegendControl({
       position: 'bottomright'
@@ -454,7 +422,7 @@
     var ToggleControl = L.Control.extend({
       initialize: function () {
         this.openPanel = false;
-        this.sliderControl = sliderControl.getContainer();
+        this.sliderControl = document.getElementsByClassName('slider-container')[0];//sliderControl.getContainer();
         this.tabControl = tabControl.getContainer();
         this.legendControl = legend.getContainer();
       },

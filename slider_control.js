@@ -38,13 +38,16 @@ var SliderControl = L.Control.extend({
   },
 
   onAdd: function(map) {
-    var containerDiv = L.DomUtil.create('div', 'container');
+    var containerDiv = L.DomUtil.create('div', 'whole-container');
     var titleH = L.DomUtil.create('h3');
     titleH.textContent = '서울생활인구 Populations by time in Seoul';
+
     var timeH = L.DomUtil.create('h3','time-h');
     timeH.id = 'timeLabel';
     timeH.classList.add('f-left')
     timeH.textContent = this.getDisplayText(totalTimeRange[0]);
+
+    var sliderContainer = L.DomUtil.create('div', 'slider-container');
 
     var timeSliderDiv = L.DomUtil.create('div', 'slider-wrapper');
     var dateLabel = L.DomUtil.create('label');
@@ -157,17 +160,19 @@ var SliderControl = L.Control.extend({
 
     containerDiv.appendChild(titleH);
 
-    containerDiv.appendChild(dateLabel);
-    containerDiv.appendChild(timeSliderDiv);
+    sliderContainer.appendChild(dateLabel);
+    sliderContainer.appendChild(timeSliderDiv);
 
-    containerDiv.appendChild(dayLabel);
-    containerDiv.appendChild(daySliderDiv);
-
-    containerDiv.appendChild(timeH);
-    containerDiv.appendChild(playButton);
-    containerDiv.appendChild(pauseButton);
+    sliderContainer.appendChild(dayLabel);
+    sliderContainer.appendChild(daySliderDiv);
 
 
+
+    sliderContainer.appendChild(timeH);
+    sliderContainer.appendChild(playButton);
+    sliderContainer.appendChild(pauseButton);
+
+    containerDiv.appendChild(sliderContainer);
     return containerDiv;
   },
 
