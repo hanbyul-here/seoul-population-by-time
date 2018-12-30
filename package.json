@@ -1,0 +1,23 @@
+{
+  "name": "seoul-population-by-time-front",
+  "version": "1.0.0",
+  "description": "[프로젝트 보기](https://hanbyul-here.github.io/seoul-population-by-time/)",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup src/main.js --file bundle.js --format iife"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hanbyul-here/seoul-population-by-time.git"
+  },
+  "author": "Hanbyul Jo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hanbyul-here/seoul-population-by-time/issues"
+  },
+  "homepage": "https://github.com/hanbyul-here/seoul-population-by-time#readme",
+  "devDependencies": {
+    "rollup": "^1.0.0"
+  }
+}

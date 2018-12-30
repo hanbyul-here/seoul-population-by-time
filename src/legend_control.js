@@ -43,3 +43,5 @@ var LegendControl = L.Control.extend({
     }
 
   });
+
+export default LegendControl;

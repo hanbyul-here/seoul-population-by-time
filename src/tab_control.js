@@ -67,3 +67,5 @@ var TabControl = L.Control.extend({
 })
 
 L.extend(TabControl.prototype, L.Evented.prototype);
+
+export default TabControl;

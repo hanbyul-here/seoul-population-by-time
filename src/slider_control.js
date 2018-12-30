@@ -256,3 +256,5 @@ function getTimeIndex(d, t) {
 function getCurrentSlideValue(timeIndex, dayIndex) {
   return timeIndex
 }
+
+export default SliderControl;
