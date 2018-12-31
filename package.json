@@ -1,7 +1,7 @@
 {
   "name": "seoul-population-by-time-front",
   "version": "1.0.0",
-  "description": "[프로젝트 보기](https://hanbyul-here.github.io/seoul-population-by-time/)",
+  "description": "서울생활인구 시각화 ",
   "main": "src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
