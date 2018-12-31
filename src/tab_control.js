@@ -1,6 +1,7 @@
 var TabControl = L.Control.extend({
   initialize: function(opts) {
     this.tangramLayer = tangramLayer;
+    this.sliderControl = opts.sliderControl;
     this.tabs = opts.tabs;
     this.currentDataSources = tangramLayer.scene.sources;
     this.prevTab = this.tabs[0];
@@ -44,9 +45,10 @@ var TabControl = L.Control.extend({
 
         self.prevTab = e;
         self.tangramLayer.scene.updateConfig().then(() => {
-            sliderControl.updateTangram(sliderControl.getIndex());
+            self.sliderControl.updateTangram(self.sliderControl.getIndex());
         })
-
+        console.log("from tab")
+        console.log(e);
         self.fire('tabChange', {
           value: e
         })

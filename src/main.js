@@ -4,9 +4,6 @@ import LegendControl from './legend_control';
 import ToggleControl from './toggle_control';
 import tabData from './tab_data';
 
-var sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
-var tabControl = new TabControl({position: 'topright', tabs: tabData});
-var legend = new LegendControl();
 
 
 function initMap() {
@@ -26,8 +23,26 @@ function initMap() {
          onTangramHover(selection);
        }
      }
-    })
+    });
 
+    tangramLayer.scene.subscribe({
+      load: (ev) => {
+
+        var sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
+        window.tabControl = new TabControl({position: 'topright', sliderControl: sliderControl, tabs: tabData});
+        window.legend = new LegendControl();
+        sliderControl.addTo(map);
+        tabControl.addTo(map);
+        legend.addTo(map);
+        legend.update(tabData[0]);
+        var toggle = new ToggleControl();
+        toggle.addTo(map);
+        tabControl.on('tabChange', function (e) {
+          legend.update(e.value);
+        })
+
+      }
+    })
     tangramLayer.addTo(map)
   }
 
@@ -131,14 +146,3 @@ function initMap() {
   initMap();
 
 
-  sliderControl.addTo(map);
-  tabControl.addTo(map);
-  legend.addTo(map);
-  legend.update(tabData[0]);
-
-  tabControl.on('tabChange', function (e) {
-    legend.update(e.value);
-  })
-
-  var toggle = new ToggleControl();
-  toggle.addTo(map);

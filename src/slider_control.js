@@ -22,9 +22,9 @@ var totalTimeRange = Array(timeUnit * dayUnit)
 var dayWords = '월화수목금토일';
 
 
-function addDataToTangram () {
-  var currentDataSources = Object.keys(tangramLayer.scene.sources);
-}
+// function addDataToTangram () {
+//   var currentDataSources = Object.keys(tangramLayer.scene.sources);
+// }
 
 var SliderControl = L.Control.extend({
   initialize: function(opts) {
