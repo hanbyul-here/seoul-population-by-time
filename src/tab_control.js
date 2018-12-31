@@ -47,8 +47,6 @@ var TabControl = L.Control.extend({
         self.tangramLayer.scene.updateConfig().then(() => {
             self.sliderControl.updateTangram(self.sliderControl.getIndex());
         })
-        console.log("from tab")
-        console.log(e);
         self.fire('tabChange', {
           value: e
         })
