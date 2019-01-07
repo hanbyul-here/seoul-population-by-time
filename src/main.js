@@ -4,8 +4,6 @@ import LegendControl from './legend_control';
 import ToggleControl from './toggle_control';
 import tabData from './tab_data';
 
-
-
 function initMap() {
     window.map = L.map('map');
 
@@ -28,7 +26,7 @@ function initMap() {
     tangramLayer.scene.subscribe({
       load: (ev) => {
 
-        var sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
+        window.sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
         window.tabControl = new TabControl({position: 'topright', sliderControl: sliderControl, tabs: tabData});
         window.legend = new LegendControl();
         sliderControl.addTo(map);
@@ -142,6 +140,9 @@ function initMap() {
     document.getElementById('map').style.cursor = selection.feature ? 'pointer' : '';
   }
 
+  function getDisplayTextWODay(s) {
+    return s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + '  '+ s[8]+s[9]+'시';
+  }
 
   initMap();
 

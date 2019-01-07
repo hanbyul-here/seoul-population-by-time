@@ -2,7 +2,6 @@ var timeUnit = 24;
 // This only works because it is not in between months
 var startingDate = 20180827;
 var endingDate = 20180902;
-
 var dayUnit = 7;
 
 var timeRange = Array(timeUnit).fill().map((f,idx) => idx);
@@ -244,10 +243,6 @@ var SliderControl = L.Control.extend({
    }
 });
 
-
-function getDisplayTextWODay(s) {
-    return s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + '  '+ s[8]+s[9]+'시';
-}
 
 function getTimeIndex(d, t) {
   return (d*24 + t);
