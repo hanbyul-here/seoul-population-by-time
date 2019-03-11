@@ -185,15 +185,7 @@ var SliderControl = L.Control.extend({
       }
       this.updateTangram(this.currentSlideValue);
 
-      // console.log(this.currentSlideValue);
-      // var idxNumber = Math.floor(this.currentSlideValue);
-
-      // console.log(totalTimeRange[idxNumber]);
-      // this.currentDayTime = totalTimeRange[idxNumber];
-      // console.log(this.currentDayTime);
-
-
-      var integerSlidingVal = Math.round(this.currentSlideValue);
+      var integerSlidingVal = Math.floor(this.currentSlideValue);
 
       if (Math.abs(this.currentSlideValue - integerSlidingVal) < 0.00001) {
         timeSlider.noUiSlider.set(integerSlidingVal%timeUnit);
@@ -201,7 +193,6 @@ var SliderControl = L.Control.extend({
         this.currentDayIndex = Math.floor(integerSlidingVal/timeUnit);
         this.currentTimeIndex = integerSlidingVal%timeUnit;
         this.currentDayTime = totalTimeRange[getTimeIndex(this.currentDayIndex, this.currentTimeIndex)];
-
         timeH.textContent = this.getDisplayText(this.currentDayTime);
 
       }
