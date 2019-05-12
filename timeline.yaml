@@ -39,7 +39,7 @@ sources:
       url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
     dong_outline:
         type: GeoJSON
-        url: ./geometries/py/new_dong.json
+        url: ./geometries/new_dong.json
     hex:
         type: GeoJSON
         url: ./geometries/hex.json
