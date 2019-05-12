@@ -3,33 +3,33 @@
 #   - https://www.nextzen.org/carto/refill-style/themes/color-zinc.zip
 textures:
     data_image:
-        url: ./data/20180827/total.png
+        url: ./data/20190304/total.png
         filtering: nearest
     residents_data_image:
         url: ./data/residents.png
     female_data_image:
-        url: ./data/20180827/female.png
+        url: ./data/20190304/female.png
         filtering: nearest
     male_data_image:
-        url: ./data/20180827/male.png
+        url: ./data/20190304/male.png
         filtering: nearest
     age_0_image:
-        url: ./data/20180827/age0.png
+        url: ./data/20190304/a10.png
         filtering: nearest
     age_1_image:
-        url: ./data/20180827/age1.png
+        url: ./data/20190304/a20.png
         filtering: nearest
     age_2_image:
-        url: ./data/20180827/age2.png
+        url: ./data//20190304/a30.png
         filtering: nearest
     age_3_image:
-        url: ./data/20180827/age3.png
+        url: ./data//20190304/a40.png
         filtering: nearest
     age_4_image:
-        url: ./data/20180827/age4.png
+        url: ./data//20190304/a50.png
         filtering: nearest
     age_5_image:
-        url: ./data/20180827/age5.png
+        url: ./data//20190304/a60.png
         filtering: nearest
 global:
     highlighted_dong: false
@@ -39,16 +39,16 @@ sources:
       url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
     dong_outline:
         type: GeoJSON
-        url: ./data/20180827/final_final_dong.geojson
+        url: ./geometries/py/new_dong.json
     hex:
         type: GeoJSON
-        url: ./geometries/hex.geojson
+        url: ./geometries/hex.json
     # half_hex_0:
     #     type: GeoJSON
-    #     url: ./geometries/half-key0.geojson
+    #     url: ./geometries/half_hex_2.json
     # half_hex_1:
     #     type: GeoJSON
-    #     url: ./geometries/half-key1.geojson
+    #     url: ./geometries/half_hex_1.json
 
     # male_source:
     #     type: GeoJSON
@@ -263,11 +263,6 @@ styles:
                           st.y = 1.-(st.y/texHeigth);
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
-                color: |
-                    float yIndex = getIndex(color.xy);
-                    vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
-                    float cData = (colorData.r+colorData.g+colorData.b)/3.0;
-                    color.rgb = vec3((231./255. + cData/100.), (41./255. + cData/100.) ,(138./255. +cData/100.));
                 position: |
                     float zz = (position.z - .5);
                     float t = u_offset;
@@ -304,11 +299,6 @@ styles:
                           st.y = 1.-(st.y/texHeigth);
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
-                color: |
-                    float yIndex = getIndex(color.xy);
-                    vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
-                    float cData = (colorData.r+colorData.g+colorData.b)/3.0;
-                    color.rgb = vec3((217./255. + cData/2.) ,( 95./255. + cData/2.) ,(2./255.+ cData));
                 position: |
                     float zz = (position.z - .5);
                     float t = u_offset;
@@ -345,11 +335,6 @@ styles:
                           st.y = 1.-(st.y/texHeigth);
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
-                color: |
-                    float yIndex = getIndex(color.xy);
-                    vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
-                    float cData = (colorData.r+colorData.g+colorData.b)/3.0;
-                    color.rgb = vec3(230./255.,171./255.,(2./255. + cData*2.0));
                 position: |
                     float zz = (position.z - .5);
                     float t = u_offset;
@@ -386,13 +371,6 @@ styles:
                           st.y = 1.-(st.y/texHeigth);
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
-                color: |
-                    float yIndex = getIndex(color.xy);
-                    vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
-                    float cData = (colorData.r+colorData.g+colorData.b)/3.0;
-                    // 102,166,30
-                    color.rgb = vec3(102./255.,166./255.,(30./255. + cData*2.0));
-
                 position: |
                     float zz = (position.z - .5);
                     float t = u_offset;
@@ -429,13 +407,6 @@ styles:
                           st.y = 1.-(st.y/texHeigth);
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
-                color: |
-                    float yIndex = getIndex(color.xy);
-                    vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
-                    float cData = (colorData.r+colorData.g+colorData.b)/3.0;
-                    // 27,158,119
-                    color.rgb = vec3((27./255. + cData*2.0),158./255.,119./255.);
-
                 position: |
                     float zz = (position.z - .5);
                     float t = u_offset;
@@ -472,12 +443,6 @@ styles:
                           st.y = 1.-(st.y/texHeigth);
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
-                color: |
-                    float yIndex = getIndex(color.xy);
-                    vec4 colorData = getColor(vec2(mod(u_offset,u_param.x), mod(yIndex, u_param.y) ));
-                    float cData = (colorData.r+colorData.g+colorData.b)/3.0;
-                    // 117,112,179
-                    color.rgb = vec3((117./255. + cData*2.0), 112./255., 179./255.);
 
                 position: |
                     vec3 pos = worldPosition().xyz;
@@ -536,7 +501,7 @@ layers:
             filter: { name: global.highlighted_dong }
             draw:
                 lines:
-                    color: yellow
+                    color: '#999'
     dong:
         data: { source: hex }
         draw:
@@ -580,7 +545,7 @@ layers:
         enabled: false
         draw:
             femaleStyle:
-                order: 30
+                order: 29
                 color: |
                     function () {
                       return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
@@ -594,7 +559,7 @@ layers:
         enabled: false
         draw:
             maleStyle:
-                order: 29
+                order: 30
                 color: |
                     function () {
                       return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
@@ -608,10 +573,7 @@ layers:
         draw:
             age0Style:
                 order: 60
-                color: |
-                    function () {
-                      return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
-                    }
+                color: "#440154"
                 extrude: |
                   function () {
                     return (feature.id + 1) ;
@@ -621,10 +583,7 @@ layers:
         draw:
             age1Style:
                 order: 59
-                color: |
-                    function () {
-                      return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
-                    }
+                color: "#414287"
                 extrude: |
                   function () {
                     return (feature.id + 1) ;
@@ -635,10 +594,7 @@ layers:
         draw:
             age2Style:
                 order: 58
-                color: |
-                    function () {
-                      return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
-                    }
+                color: "#2a768e"
                 extrude: |
                   function () {
                     return (feature.id + 1) ;
@@ -648,10 +604,7 @@ layers:
         draw:
             age3Style:
                 order: 51
-                color: |
-                    function () {
-                      return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
-                    }
+                color: "#21a585"
                 extrude: |
                   function () {
                     return (feature.id + 1) ;
@@ -661,10 +614,7 @@ layers:
         draw:
             age4Style:
                 order: 52
-                color: |
-                    function () {
-                      return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
-                    }
+                color: "#70cf57"
                 extrude: |
                   function () {
                     return (feature.id + 1) ;
@@ -674,10 +624,7 @@ layers:
         draw:
             age5Style:
                 order: 53
-                color: |
-                    function () {
-                      return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
-                    }
+                color: "#b0dd2f"
                 extrude: |
                   function () {
                     return (feature.id + 1) ;

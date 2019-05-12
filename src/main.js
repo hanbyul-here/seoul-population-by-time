@@ -2,8 +2,8 @@ import SliderControl from './slider_control';
 import TabControl from './tab_control';
 import LegendControl from './legend_control';
 import ToggleControl from './toggle_control';
-import tabData from './tab_data';
-
+import getTabData from './tab_data';
+import {formatNumber} from './util'
 function initMap() {
     window.map = L.map('map');
 
@@ -25,26 +25,31 @@ function initMap() {
 
     tangramLayer.scene.subscribe({
       load: (ev) => {
-
         window.sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
-        window.tabControl = new TabControl({position: 'topright', sliderControl: sliderControl, tabs: tabData});
         window.legend = new LegendControl();
         sliderControl.addTo(map);
-        tabControl.addTo(map);
-        legend.addTo(map);
-        legend.update(tabData[0]);
-        var toggle = new ToggleControl();
-        toggle.addTo(map);
-        tabControl.on('tabChange', function (e) {
-          legend.update(e.value);
+        var tabData
+        getTabData()
+        .then(e => {
+          tabData = e
+          legend.addTo(map);
+          legend.update(tabData[0]);
+          window.tabControl = new TabControl({position: 'topright', sliderControl: sliderControl, tabs: tabData});
+          tabControl.on('tabChange', function (e) {
+            legend.update(e.value);
+          })
+          tabControl.addTo(map);
+          var toggle = new ToggleControl();
+          toggle.addTo(map);
         })
-
       }
     })
     tangramLayer.addTo(map)
   }
 
   var PopupPanel = (function () {
+      var popData;
+      fetch('./data/20190304/whole.json').then(res => res.json()).then(e => popData = e)
       var displayKey = {
         t:'전체',
         f:'여성',
@@ -57,24 +62,25 @@ function initMap() {
         a5: '50대',
         a6: '60대'
       }
+      var keys = ['t','f','m','a1','a2','a3','a4','a5','a6']
 
       function makeDongHeader(obj) {
         var tableRowElem = document.createElement('tr');
         var nameColElem = document.createElement('h5');
-        nameColElem.textContent = obj.name;
+        nameColElem.textContent = obj.full_name;
         tableRowElem.appendChild(nameColElem);
         return tableRowElem;
       }
 
-      function makeCurrentTimeHeader(obj) {
+      function makeCurrentTimeHeader() {
         var tableRowElem = document.createElement('tr');
         var nameColElem = document.createElement('h5');
-        nameColElem.textContent = getDisplayTextWODay(sliderControl.getNow().toString());
+        nameColElem.textContent = getDisplayTextWODay(sliderControl.getNow());
         tableRowElem.appendChild(nameColElem);
         return tableRowElem;
       }
 
-      function makeRow(key, data) {
+      function makeRow(data, key) {
         var tableRowElem = document.createElement('tr');
         var nameColElem = document.createElement('td');
         var valueColElem = document.createElement('td');
@@ -82,10 +88,10 @@ function initMap() {
         nameColElem.classList.add(key);
         valueColElem.classList.add('value');
 
-
+        var index = sliderControl.getIndex();
         if(data) {
           nameColElem.textContent = displayKey[key];
-          valueColElem.textContent = data[key];
+          valueColElem.textContent = formatNumber(data[index]);
         } else {
           nameColElem.textContent = displayKey['r'];
           nameColElem.classList.add('r');
@@ -98,22 +104,24 @@ function initMap() {
 
 
       function jsonToTable(obj) {
+        var code = obj['code_8'];
+        var dong = popData.filter(e => e['code_8'] === code)[0]
+
         var wrapperTableElem = document.createElement('table');
         wrapperTableElem.classList.add('feature-table');
 
-        var dongHeader = makeDongHeader(obj);
+        var dongHeader = makeDongHeader(dong);
         wrapperTableElem.appendChild(dongHeader);
-        var scopedObj = obj.population[sliderControl.getNow()]
 
-        var timeHeader = makeCurrentTimeHeader(scopedObj);
+        var timeHeader = makeCurrentTimeHeader();
         wrapperTableElem.appendChild(timeHeader);
 
-        var residentRow = makeRow(obj['r']);
-        for (var key in scopedObj) {
-            var tableRowElem = makeRow(key, scopedObj);
-            wrapperTableElem.appendChild(tableRowElem);
-        }
-        wrapperTableElem.appendChild(residentRow);
+        keys.forEach(e => {
+          var tableRowElem = makeRow(dong[e], e);
+          wrapperTableElem.appendChild(tableRowElem);
+        })
+
+        // wrapperTableElem.appendChild(residentRow);
 
 
         return wrapperTableElem;
@@ -141,9 +149,9 @@ function initMap() {
   }
 
   function getDisplayTextWODay(s) {
-    return s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + '  '+ s[8]+s[9]+'시';
+    s = s+'';
+    return s[0]+s[1]+s[2]+s[3]+'/'+s[4]+s[5] + '/' + s[6] +s[7] + '  '+ s[8]+s[9]+'시';
   }
 
   initMap();
-
 

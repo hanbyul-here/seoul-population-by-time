@@ -1,3 +1,5 @@
+import {formatNumber} from './util'
+
 var LegendControl = L.Control.extend({
     initialize: function(opts) {
       this.currentLegend='total';
@@ -18,9 +20,9 @@ var LegendControl = L.Control.extend({
 
       var legendBar = L.DomUtil.create('div', 'legend-bar '+ tabD.layerName);
       var max = L.DomUtil.create('div', 'max-value');
-      max.textContent = '최대 :'+ tabD.max;
+      max.textContent = '최대 :'+ formatNumber(tabD.max);
       var min = L.DomUtil.create('div', 'min-value');
-      min.textContent = '최소 :'+ tabD.min;
+      min.textContent = '최소 :'+ formatNumber(tabD.min);
 
       unitWrapper.appendChild(legendTitle);
       unitWrapper.appendChild(legendBar);

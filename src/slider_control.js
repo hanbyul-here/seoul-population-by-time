@@ -6,7 +6,7 @@ var dayUnit = 7;
 
 var timeRange = Array(timeUnit).fill().map((f,idx) => idx);
 // var dayRange = Array(dayUnit).fill().map((f,idx) => { return (startingDate + idx)});
-var dayRange = [20180827, 20180828, 20180829, 20180830, 20180831, 20180901,20180902]
+var dayRange = [20190304, 20190305, 20190306, 20190307, 20190308, 20190309,20190310]
 
 var totalTimeRange = Array(timeUnit * dayUnit)
                     .fill()
@@ -137,7 +137,7 @@ var SliderControl = L.Control.extend({
 
     timeSliderDiv.noUiSlider.on('change', function ( values, handle ) {
       //TO DO: change the currentslidervalue
-      let idx = Math.round(values[handle]);
+      let idx = Math.floor(values[handle]);
       self.currentTimeIndex = idx;
       self.currentSlideValue = getTimeIndex(self.currentDayIndex, self.currentTimeIndex);
       self.currentDayTime = totalTimeRange[getTimeIndex(self.currentDayIndex, self.currentTimeIndex)];
@@ -190,7 +190,7 @@ var SliderControl = L.Control.extend({
       if (Math.abs(this.currentSlideValue - integerSlidingVal) < 0.00001) {
         timeSlider.noUiSlider.set(integerSlidingVal%timeUnit);
         daySlider.noUiSlider.set(Math.floor(integerSlidingVal/timeUnit));
-        this.currentDayIndex = Math.floor(integerSlidingVal/timeUnit);
+        this.currentDayIndex = Math.floor(integerSlidingVal/timeUnit)%7;
         this.currentTimeIndex = integerSlidingVal%timeUnit;
         this.currentDayTime = totalTimeRange[getTimeIndex(this.currentDayIndex, this.currentTimeIndex)];
         timeH.textContent = this.getDisplayText(this.currentDayTime);
@@ -203,7 +203,7 @@ var SliderControl = L.Control.extend({
   },
 
   getIndex: function() {
-    return this.currentSlideValue;
+    return Math.floor(this.currentSlideValue);
   },
 
   setAnimation: function(timeSlider, daySlider, timeH) {
