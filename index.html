@@ -169,9 +169,22 @@
   .legend-bar.age5,.legend-box.a6:before {
     background-color:#b0dd2f;
   }
+  .sr-only {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
   </style>
 </head>
 <body>
+  <div class="sr-only">
+    이 지도는 2019년 3월 4일부터 2019년 3월 10일까지, 1주일간 한시간 간격으로 각 행정지역마다의 생활인구를 성별, 연령대별로 정리하여 시각화한 지도입니다. 원본 데이터는 서울열린데이터광장 서울생활인구 페이지에서, 시각화를 위해 정리된 자료는 다음 링크를 통해서 다운로드 받을 수 있습니다.
+    <a href="http://data.seoul.go.kr/dataVisual/seoul/seoulLivingPopulation.do">서울열린데이터광장 생활인구 관련 페이지 가기</a>
+    <a href="https://raw.githubusercontent.com/hanbyul-here/seoul-population-by-time/master/data/20190304.csv">시각화를 위해 정리된 형태의 데이터 다운로드받기</a>
+  </div>
   <div id="map">
   </div>
   <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
