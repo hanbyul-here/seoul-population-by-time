@@ -38,7 +38,7 @@ var SliderControl = L.Control.extend({
 
   onAdd: function(map) {
     var containerDiv = L.DomUtil.create('div', 'whole-container');
-    var titleH = L.DomUtil.create('h3');
+    var titleH = L.DomUtil.create('h1');
     titleH.textContent = '서울생활인구 Populations by time in Seoul';
 
     var timeH = L.DomUtil.create('h3','time-h');
