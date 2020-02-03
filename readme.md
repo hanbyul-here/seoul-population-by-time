@@ -22,7 +22,7 @@ There are two main things that need to happen when data being processed.
 
 ### Visualization
 
-Seoul Population By Time took the strategy that Patricio Gonzalez Vivo used for [Weather Over Time]((https://github.com/tangrams/WeatherOverTime/)) to make seamless animation with Tangram (3D rendering engine for map). To recap the strategy
+Seoul Population By Time took the strategy that Patricio Gonzalez Vivo used for [Weather Over Time](https://github.com/tangrams/WeatherOverTime/) to make seamless animation with Tangram (3D rendering engine for map). To recap the strategy
 
 - Data is encdoed in PNG image (row is each admin, column is time)
 - This data png is passed as texture to each layer

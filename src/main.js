@@ -22,7 +22,8 @@ function initMap() {
        hover: function(selection) {
          onTangramHover(selection);
        }
-     }
+     },
+     attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> &copy; OSM contributors'
     });
 
 

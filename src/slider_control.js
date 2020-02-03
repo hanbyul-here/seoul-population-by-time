@@ -38,7 +38,14 @@ var SliderControl = L.Control.extend({
   onAdd: function(map) {
     var containerDiv = L.DomUtil.create('div', 'whole-container');
     var titleH = L.DomUtil.create('h1');
-    titleH.textContent = '서울생활인구 Populations by time in Seoul';
+    titleH.textContent = lang.title[globalConfig.lang];
+
+    var linkToGithub = L.DomUtil.create('a', 'github-link f-right')
+    linkToGithub.href = "https://github.com/hanbyul-here/seoul-population-by-time"
+    linkToGithub.title = lang.github[globalConfig.lang]
+    var githubLogo = L.DomUtil.create('img')
+    githubLogo.src = "./github-mark.png"
+    linkToGithub.appendChild(githubLogo)
 
     var timeH = L.DomUtil.create('h3','time-h');
     timeH.id = 'timeLabel';
@@ -55,7 +62,6 @@ var SliderControl = L.Control.extend({
     var dayLabel = L.DomUtil.create('label');
     dayLabel.textContent = lang.day[globalConfig.lang];
     daySliderDiv.id = 'daySlider';
-    console.log('how about here')
     noUiSlider.create(timeSliderDiv, {
       start: 0,
       connect: true,
@@ -158,6 +164,7 @@ var SliderControl = L.Control.extend({
     L.DomEvent.disableClickPropagation(containerDiv);
 
     containerDiv.appendChild(titleH);
+    containerDiv.appendChild(linkToGithub)
 
     sliderContainer.appendChild(dateLabel);
     sliderContainer.appendChild(timeSliderDiv);

@@ -29,7 +29,7 @@ const lang = {
   },
   "residence":{
     "kr":"주민등록인구와 비교해보기",
-    "en":"Residential population"
+    "en":"residential population"
   },
   "days": {
     "kr":["월","화","수","목","금","토","일"],
@@ -54,6 +54,10 @@ const lang = {
   "min":{
     "kr":"최소",
     "en":"min"
+  },
+  "github": {
+    "kr":"깃허브에서 소스코드 보기",
+    "en":"See source code on GitHubs"
   }
 }
 
