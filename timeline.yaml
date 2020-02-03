@@ -515,7 +515,7 @@ layers:
                     return (feature.id + 1) ;
                    }
     time_pop:
-        data: { source: half_hex_1 }
+        data: { source: half_hex_0 }
         enabled: false
         draw:
             dongStyle:
@@ -529,7 +529,7 @@ layers:
                     return (feature.id + 1) ;
                   }
     resident:
-        data: { source: half_hex_0 }
+        data: { source: half_hex_1 }
         enabled: false
         draw:
             residentsStyle:
@@ -540,11 +540,11 @@ layers:
                     return (feature.id + 1) ;
                   }
     female:
-        data: { source: half_hex_0 }
+        data: { source: half_hex_1 }
         enabled: false
         draw:
             femaleStyle:
-                order: 29
+                order: 32
                 color: |
                     function () {
                       return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
@@ -554,11 +554,11 @@ layers:
                     return (feature.id + 1) ;
                   }
     male:
-        data: { source: half_hex_1 }
+        data: { source: half_hex_0 }
         enabled: false
         draw:
             maleStyle:
-                order: 35
+                order: 29
                 color: |
                     function () {
                       return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]

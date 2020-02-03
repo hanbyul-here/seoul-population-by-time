@@ -1,3 +1,36 @@
+# Seoul Population By Time
+
+Seoul Population By Time is the map showing how many people were active in the adnimistrative district every hour for a week. (from 3/4/2019 to 3/10/2019)
+
+👉 [see the map](https://seoul-population-by-time.netlify.com/)
+
+👉 Data is from [Seoul Open Data Portal](http://data.seoul.go.kr/dataVisual/seoul/seoulLivingPopulation.do)
+
+
+## How to
+
+### data processing
+
+jupyter notebook that I wrote: https://gist.github.com/hanbyul-here/ed99daf0e0e192742fab72f1bff8340a
+
+There are two main things that need to happen when data being processed.
+
+- parse the population data into png image
+- make hexagon geojson out of administrative data
+
++ format the data that cen be used in other tools such as Excel, KeplerGL.
+
+### Visualization
+
+Seoul Population By Time took the strategy that Patricio Gonzalez Vivo used for [Weather Over Time]((https://github.com/tangrams/WeatherOverTime/)) to make seamless animation with Tangram (3D rendering engine for map). To recap the strategy
+
+- Data is encdoed in PNG image (row is each admin, column is time)
+- This data png is passed as texture to each layer
+- each layer reads the data from the texture, makes the shader to reflect this data.
+
+ One thing to note is that Weather Over time used fragment shader while Seoul Population By Time used Vertex Shader to control the heights of hexagons. Since Vertex Shader gets compiled before Fragment Shader, there were some limitations such as Vertex Shader doesn't have access to color information. Some deilted difference of implementation, such as Seoul Population By Time used position.z(`extract`)to pass the index number to Shader while Weather Over Time used color, comes from this difference.
+
+
 # 서울생활인구지도
 
 서울생활인구지도  2019년 3월 4일부터 2019년 3월 10일까지, 1주일간 한시간 간격으로 각 행정지역마다의 생활인구를 성별, 연령대별로 시각화한 지도입니다.

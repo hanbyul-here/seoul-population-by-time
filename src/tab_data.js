@@ -1,3 +1,5 @@
+import lang from './lang'
+
 function getTabData() {
   var minMaxData;
   var ageGroupData;
@@ -15,7 +17,7 @@ function getTabData() {
       sourceName: 'tri'+i,
       min: e['a'+(i+1)+'0_min'],
       max: e['a'+(i+1)+'0_max'],
-      legendTitle: (i+1)+'0대',
+      legendTitle: lang.ageItems[globalConfig.lang][i],
       source:{
         type: 'GeoJSON',
         url: './geometries/tri_'+(i+1)+'.json'
@@ -24,12 +26,12 @@ function getTabData() {
       tabData = [
         {
           value: 'total',
-          displayText: '전체',
+          displayText: lang.total[globalConfig.lang],
           data: [
             {
               layerName: 'dong',
               sourceName: 'hex',
-              legendTitle: '전체',
+              legendTitle: lang.total[globalConfig.lang],
               max: minMaxData.t_max,
               min: minMaxData.t_min,
               source: {
@@ -40,43 +42,44 @@ function getTabData() {
           ]
         }, {
           value: 'sex',
-          displayText: '성별',
+          displayText: lang.sex[globalConfig.lang],
           data: [
             {
-              layerName: 'female',
+              layerName: 'male',
               sourceName: 'half_hex_0',
-              legendTitle: '여성',
-              max: minMaxData.f_max,
-              min: minMaxData.f_min,
+              legendTitle: lang.sexItems[globalConfig.lang][1],
+              max: minMaxData.m_max,
+              min: minMaxData.m_min,
               source: {
                 type: 'GeoJSON',
                 url: './geometries/half_hex_1.json'
               }
+            },
+            {
+              layerName: 'female',
+              sourceName: 'half_hex_1',
+              legendTitle: lang.sexItems[globalConfig.lang][0],
+              max: minMaxData.f_max,
+              min: minMaxData.f_min,
+              source: {
+                type: 'GeoJSON',
+                url: './geometries/half_hex_2.json'
+              }
             }
-          , {
-            layerName: 'male',
-            sourceName: 'half_hex_1',
-            legendTitle: '남성',
-            max: minMaxData.m_max,
-            min: minMaxData.m_min,
-            source: {
-              type: 'GeoJSON',
-              url: './geometries/half_hex_2.json'
-            }
-          }]
+          ]
         }, {
           value: 'age',
-          displayText: '연령군별',
+          displayText: lang.ages[globalConfig.lang],
           data: ageGroupData
         },
           {
           value: 'resident',
-          displayText: '주민등록인구와 비교해보기',
+          displayText: lang.residence[globalConfig.lang],
           data: [
             {
               layerName: 'time_pop',
-              sourceName: 'half_hex_1',
-              legendTitle: '생활인구',
+              sourceName: 'half_hex_0',
+              legendTitle: lang.residenceItems[globalConfig.lang][0],
               max: 187456,
               min: 1866,
               source: {
@@ -86,8 +89,8 @@ function getTabData() {
             }
           , {
             layerName: 'resident',
-            sourceName: 'half_hex_0',
-            legendTitle: '주민등록인구',
+            sourceName: 'half_hex_1',
+            legendTitle: lang.residenceItems[globalConfig.lang][1],
               max: 56121,
               min: 331,
             source: {

@@ -1,3 +1,4 @@
+import lang from './lang'
 var timeUnit = 24;
 // This only works because it is not in between months
 var startingDate = 20180827;
@@ -17,8 +18,6 @@ var totalTimeRange = Array(timeUnit * dayUnit)
                       if(timeString.length < 2) timeString = '0' + timeString;
                       return dayRange[dayIndex].toString() + timeString;
                     });
-
-var dayWords = '월화수목금토일';
 
 
 // function addDataToTangram () {
@@ -50,14 +49,13 @@ var SliderControl = L.Control.extend({
 
     var timeSliderDiv = L.DomUtil.create('div', 'slider-wrapper');
     var dateLabel = L.DomUtil.create('label');
-    dateLabel.textContent = '시간';
+    dateLabel.textContent = lang.hour[globalConfig.lang];
     timeSliderDiv.id = 'tileSlider';
-
     var daySliderDiv = L.DomUtil.create('div', 'slider-wrapper');
     var dayLabel = L.DomUtil.create('label');
-    dayLabel.textContent = '일';
+    dayLabel.textContent = lang.day[globalConfig.lang];
     daySliderDiv.id = 'daySlider';
-
+    console.log('how about here')
     noUiSlider.create(timeSliderDiv, {
       start: 0,
       connect: true,
@@ -109,7 +107,8 @@ var SliderControl = L.Control.extend({
       }
     });
 
-
+    var buttonWrapper = L.DomUtil.create('div');
+    buttonWrapper.classList.add('f-right')
     var playButton = L.DomUtil.create('button');
     playButton.id = 'play';
     playButton.classList.add('f-left');
@@ -120,6 +119,8 @@ var SliderControl = L.Control.extend({
     pauseButton.classList.add('f-left');
     pauseButton.textContent = 'pause';
 
+    buttonWrapper.appendChild(playButton)
+    buttonWrapper.appendChild(pauseButton)
 
     var self = this;
     playButton.onclick = function (ev) {
@@ -154,7 +155,6 @@ var SliderControl = L.Control.extend({
       self.updateTangram(totalTimeRange.indexOf(self.currentDayTime));
       timeH.textContent = self.getDisplayText(self.currentDayTime);
     });
-
     L.DomEvent.disableClickPropagation(containerDiv);
 
     containerDiv.appendChild(titleH);
@@ -168,8 +168,7 @@ var SliderControl = L.Control.extend({
 
 
     sliderContainer.appendChild(timeH);
-    sliderContainer.appendChild(playButton);
-    sliderContainer.appendChild(pauseButton);
+    sliderContainer.appendChild(buttonWrapper);
 
     containerDiv.appendChild(sliderContainer);
     return containerDiv;
@@ -230,7 +229,9 @@ var SliderControl = L.Control.extend({
   },
 
   getDisplayText: function(s) {
-     return s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + '  '+ s[8]+s[9]+'시'+ ' ' + dayWords[this.currentDayIndex]+'요일';
+
+     return (globalConfig.lang=='kr')? s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + '  '+ s[8]+s[9]+'시'+ ' ' + lang.days[globalConfig.lang][this.currentDayIndex] +'요일':
+      s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + ' '+ s[8]+s[9]+ ' ' + lang.days[globalConfig.lang][this.currentDayIndex];
    }
 });
 

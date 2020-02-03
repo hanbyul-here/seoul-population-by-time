@@ -1,4 +1,5 @@
 import {formatNumber} from './util'
+import lang from './lang'
 
 var LegendControl = L.Control.extend({
     initialize: function(opts) {
@@ -20,9 +21,9 @@ var LegendControl = L.Control.extend({
 
       var legendBar = L.DomUtil.create('div', 'legend-bar '+ tabD.layerName);
       var max = L.DomUtil.create('div', 'max-value');
-      max.textContent = '최대 :'+ formatNumber(tabD.max);
+      max.textContent = lang.max[globalConfig.lang] + ' :'+ formatNumber(tabD.max);
       var min = L.DomUtil.create('div', 'min-value');
-      min.textContent = '최소 :'+ formatNumber(tabD.min);
+      min.textContent = lang.min[globalConfig.lang] + ' :'+ formatNumber(tabD.min);
 
       unitWrapper.appendChild(legendTitle);
       unitWrapper.appendChild(legendBar);

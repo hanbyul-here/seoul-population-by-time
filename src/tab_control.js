@@ -13,9 +13,6 @@ var TabControl = L.Control.extend({
     var self = this;
 
     L.DomEvent.disableClickPropagation(containerDiv);
-    var timePopLabel = L.DomUtil.create('div', 'tab label');
-    timePopLabel.textContent = '생활인구';
-    containerDiv.appendChild(timePopLabel);
     this.tabs
     .map((e, i) => {
       var wrapperDiv = L.DomUtil.create('div', 'tab');

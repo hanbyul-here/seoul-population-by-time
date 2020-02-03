@@ -4,6 +4,8 @@ import LegendControl from './legend_control';
 import ToggleControl from './toggle_control';
 import getTabData from './tab_data';
 import {formatNumber} from './util'
+import lang from './lang'
+
 function initMap() {
     window.map = L.map('map');
 
@@ -22,6 +24,8 @@ function initMap() {
        }
      }
     });
+
+
 
     tangramLayer.scene.subscribe({
       load: (ev) => {
@@ -51,16 +55,16 @@ function initMap() {
       var popData;
       fetch('./data/20190304/whole.json').then(res => res.json()).then(e => popData = e)
       var displayKey = {
-        t:'전체',
-        f:'여성',
-        m:'남성',
-        r: '주민등록',
-        a1: '10대',
-        a2: '20대',
-        a3: '30대',
-        a4: '40대',
-        a5: '50대',
-        a6: '60대'
+        t:lang.total[globalConfig.lang],
+        f:lang.sexItems[globalConfig.lang][0],
+        m:lang.sexItems[globalConfig.lang][1],
+        r: lang.residenceItems[globalConfig.lang][1],
+        a1: lang.ageItems[globalConfig.lang][0],
+        a2: lang.ageItems[globalConfig.lang][1],
+        a3: lang.ageItems[globalConfig.lang][2],
+        a4: lang.ageItems[globalConfig.lang][3],
+        a5: lang.ageItems[globalConfig.lang][4],
+        a6: lang.ageItems[globalConfig.lang][5]
       }
       var keys = ['t','f','m','a1','a2','a3','a4','a5','a6']
 
