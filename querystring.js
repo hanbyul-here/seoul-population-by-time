@@ -1,4 +1,4 @@
-window.globalConfig = {lang: 'kr'}
+window.globalConfig = {lang: 'en'}
 
 function getQueryValue(str) {
   const urlParams = new URLSearchParams(window.location.search);
@@ -6,5 +6,5 @@ function getQueryValue(str) {
 }
 
 if (getQueryValue('lang')) {
-  globalConfig.lang = getQueryValue('lang') ;
+  if(getQueryValue('lang') === 'kr') globalConfig.lang = getQueryValue('lang') ;
 }
