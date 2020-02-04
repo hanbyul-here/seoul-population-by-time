@@ -35,7 +35,7 @@ Seoul Population By Time took the strategy that Patricio Gonzalez Vivo used for 
 
 서울생활인구지도  2019년 3월 4일부터 2019년 3월 10일까지, 1주일간 한시간 간격으로 각 행정지역마다의 생활인구를 성별, 연령대별로 시각화한 지도입니다.
 
-👉 [프로젝트 바로가기](https://seoul-population-by-time.netlify.com/)
+👉 [프로젝트 바로가기](https://seoul-population-by-time.netlify.com/?lang=kr)
 
 👉 데이터 출처: [서울열린데이터광장/서울생활인구](http://data.seoul.go.kr/dataVisual/seoul/seoulLivingPopulation.do)
 
