@@ -3,32 +3,32 @@
 #   - https://www.nextzen.org/carto/refill-style/themes/color-zinc.zip
 textures:
     data_image:
-        url: ./data/20190304/total.png
+        url: /data/20190304/total.png
     data_2020_0309_image:
-        url: ./data/20200309/total.png
+        url: /data/20200309/total.png
     data_2020_0316_image:
-        url: ./data/20200316/total.png
+        url: /data/20200316/total.png
     data_2020_0323_image:
-        url: ./data/20200323/total.png
+        url: /data/20200323/total.png
 sources:
     nextzen_vector_tile:
       type: MVT
       url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
     dong_outline:
         type: GeoJSON
-        url: ./geometries/new_dong.json
+        url: /geometries/new_dong.json
     half_hex_1:
         type: GeoJSON
-        url: ./geometries/half_hex_1.json
+        url: /geometries/half_hex_1.json
     tri_1:
         type: GeoJSON
-        url: ./geometries/tri_1.json
+        url: /geometries/tri_1.json
     tri_2:
         type: GeoJSON
-        url: ./geometries/tri_6.json
+        url: /geometries/tri_6.json
     tri_3:
         type: GeoJSON
-        url: ./geometries/tri_5.json
+        url: /geometries/tri_5.json
     # male_source:
     #     type: GeoJSON
     #     url: ./male_pop.geojson

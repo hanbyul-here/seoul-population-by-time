@@ -37,10 +37,8 @@ function initMap() {
 
         window.sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
         window.legend = new LegendControl();
-        console.log("???")
+
         sliderControl.addTo(map);
-        console.log("?")
-        legend.addTo(map);
 
         var tabData
         // getTabData()
@@ -69,10 +67,10 @@ function initMap() {
       var data2020W4;
       var dataKey = 't'
 
-      fetch('./data/'+date2019+'/whole.json').then(res => res.json()).then(e => popData = e)
-      fetch('./data/'+compareW2+'/total.json').then(res => res.json()).then(e => data2020W2 = e)
-      fetch('./data/'+compareW3+'/total.json').then(res => res.json()).then(e => data2020W3 = e)
-      fetch('./data/'+compareW4+'/total.json').then(res => res.json()).then(e => data2020W4 = e)
+      fetch('/data/'+date2019+'/whole.json').then(res => res.json()).then(e => popData = e)
+      fetch('/data/'+compareW2+'/total.json').then(res => res.json()).then(e => data2020W2 = e)
+      fetch('/data/'+compareW3+'/total.json').then(res => res.json()).then(e => data2020W3 = e)
+      fetch('/data/'+compareW4+'/total.json').then(res => res.json()).then(e => data2020W4 = e)
       var displayKey = {
         t:lang.total[globalConfig.lang],
         f:lang.sexItems[globalConfig.lang][0],

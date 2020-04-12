@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "rollup src/main.js --file bundle.js --format iife --watch",
     "dev:compare": "rollup src/compare/main.js --file bundle-compare.js --format iife --watch",
-    "build": "rollup --config rollup.config.js; npm run build:compare",
-    "build:compare": "rollup src/compare/main.js --file bundle-compare.js --format iife"
+    "build:compare": "rollup --config rollup.compare.config.js; ",
+    "build": "rollup --config rollup.config.js; npm run build:compare"
+
   },
   "repository": {
     "type": "git",
