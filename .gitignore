@@ -3,4 +3,5 @@ node_modules/
 dist/*
 npm-debug.log
 bundle.js
+bundle-compare.js
 .ipynb_checkpoints/
