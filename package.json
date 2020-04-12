@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "rollup src/main.js --file bundle.js --format iife --watch",
-    "build": "rollup --config"
+    "dev:compare": "rollup src/compare/main.js --file bundle-compare.js --format iife --watch",
+    "build": "rollup --config",
+    "build:compare": "rollup src/compare/main.js --file bundle-compare.js --format iife"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,7 @@
   },
   "homepage": "https://github.com/hanbyul-here/seoul-population-by-time#readme",
   "devDependencies": {
-    "rollup": "^1.0.0",
-    "rollup-plugin-babel-minify": "^6.2.0"
+    "rollup": "^2.1.0",
+    "rollup-plugin-babel-minify": "^10.0.0"
   }
 }
