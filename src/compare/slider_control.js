@@ -45,7 +45,7 @@ var SliderControl = L.Control.extend({
     linkToGithub.href = "https://github.com/hanbyul-here/seoul-population-by-time"
     linkToGithub.title = lang.github[globalConfig.lang]
     var githubLogo = L.DomUtil.create('img')
-    githubLogo.src = "./github-mark.png"
+    githubLogo.src = "/github-mark.png"
     linkToGithub.appendChild(githubLogo)
 
     var timeH = L.DomUtil.create('h3','time-h');

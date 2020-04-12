@@ -39,7 +39,7 @@ function initMap() {
         window.legend = new LegendControl();
 
         sliderControl.addTo(map);
-
+        legend.addTo(map);
         var tabData
         // getTabData()
         // .then(e => {
@@ -147,8 +147,8 @@ function initMap() {
         var dongHeader = makeDongHeader(compareDong);
         wrapperTableElem.appendChild(dongHeader);
 
-        // var timeHeader = makeCurrentTimeHeader();
-        // wrapperTableElem.appendChild(timeHeader);
+        var timeHeader = makeCurrentTimeHeader();
+        wrapperTableElem.appendChild(timeHeader);
         keys.forEach(e => {
           if(e == dataKey) {
             var compareTableRowElem = makeRow(compareDong[e], '19년3월2째주', 'color2019');
