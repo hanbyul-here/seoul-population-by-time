@@ -1,4 +1,4 @@
-import minify from 'rollup-plugin-babel-minify';
+import { terser } from "rollup-plugin-terser";
 
 module.exports = {
   input: 'src/compare/main.js',
@@ -6,6 +6,6 @@ module.exports = {
     file: 'compare-year/bundle.js',
     format: 'iife'
   },
-  plugins: [minify()]
+  plugins: [terser()]
 };
 
