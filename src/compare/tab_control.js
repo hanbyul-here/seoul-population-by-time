@@ -3,7 +3,6 @@ var TabControl = L.Control.extend({
     this.tangramLayer = tangramLayer;
     this.sliderControl = opts.sliderControl;
     this.tabs = opts.tabs;
-    this.currentDataSources = tangramLayer.scene.sources;
     this.prevTab = this.tabs[0];
    },
 
@@ -11,7 +10,6 @@ var TabControl = L.Control.extend({
     var containerDiv = L.DomUtil.create('div', 'tab-container');
 
     var self = this;
-
     L.DomEvent.disableClickPropagation(containerDiv);
     this.tabs
     .map((e, i) => {
@@ -25,27 +23,10 @@ var TabControl = L.Control.extend({
 
       oneTab.onclick = function() {
         // set the data source first if there is none
-        if (Object.keys(self.tangramLayer.scene.config.sources).findIndex((name => name===e.data[0].sourceName)) < 0) {
-          e.data.map(elem => {
-            self.tangramLayer.scene.setDataSource(elem.sourceName, elem.source);
+        window.tangramLayer.scene.load(e.sceneFile).then(() => {
+          self.fire('tabChange', {
+            value: e
           })
-        }
-
-        if (self.prevTab && self.prevTab.value !== e.value) {
-          self.prevTab.data.map(elem => {
-            self.tangramLayer.scene.config.layers[elem.layerName].enabled = false;
-          })
-          e.data.map(elem => {
-            self.tangramLayer.scene.config.layers[elem.layerName].enabled = true;
-          })
-        }
-
-        self.prevTab = e;
-        self.tangramLayer.scene.updateConfig().then(() => {
-            self.sliderControl.updateTangram(self.sliderControl.getIndex());
-        })
-        self.fire('tabChange', {
-          value: e
         })
       }
 

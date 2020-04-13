@@ -223,27 +223,20 @@ var SliderControl = L.Control.extend({
       }, 10);
     }
   },
+  updateTangramForNewScene: function(){
+    this.updateTangram(totalTimeRange.indexOf(this.currentDayTime))
+  },
 
   updateTangram: function(idx) {
-    this.tangramLayer.scene.styles.dongStyle.shaders.uniforms.u_offset = idx;
-    this.tangramLayer.scene.styles.style2020_1.shaders.uniforms.u_offset = idx;
-    this.tangramLayer.scene.styles.style2020_2.shaders.uniforms.u_offset = idx;
-    this.tangramLayer.scene.styles.style2020_3.shaders.uniforms.u_offset = idx;
-
-    // this.tangramLayer.scene.styles.femaleStyle.shaders.uniforms.u_offset = idx;
-    // this.tangramLayer.scene.styles.maleStyle.shaders.uniforms.u_offset = idx;
-    // this.tangramLayer.scene.styles.age0Style.shaders.uniforms.u_offset = idx;
-    // this.tangramLayer.scene.styles.age1Style.shaders.uniforms.u_offset = idx;
-    // this.tangramLayer.scene.styles.age2Style.shaders.uniforms.u_offset = idx;
-    // this.tangramLayer.scene.styles.age3Style.shaders.uniforms.u_offset = idx;
-    // this.tangramLayer.scene.styles.age4Style.shaders.uniforms.u_offset = idx;
-    // this.tangramLayer.scene.styles.age5Style.shaders.uniforms.u_offset = idx;
+    tangramLayer.scene.styles.dongStyle.shaders.uniforms.u_offset = idx;
+    tangramLayer.scene.styles.style2020_1.shaders.uniforms.u_offset = idx;
+    tangramLayer.scene.styles.style2020_2.shaders.uniforms.u_offset = idx;
+    tangramLayer.scene.styles.style2020_3.shaders.uniforms.u_offset = idx;
   },
 
   getDisplayText: function(s) {
 
-     return (globalConfig.lang=='kr')? s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + '  '+ s[8]+s[9]+'시'+ ' ' + lang.days[globalConfig.lang][this.currentDayIndex] +'요일':
-      s[0]+s[1]+s[2]+s[3]+'/ '+s[4]+s[5] + '/ ' + s[6] +s[7] + ' '+ s[8]+s[9]+ ' ' + lang.days[globalConfig.lang][this.currentDayIndex];
+     return (globalConfig.lang=='kr')? lang.days[globalConfig.lang][this.currentDayIndex] +'요일 '+ s[8]+s[9]+'시' : s[8]+s[9]+ ' ' + lang.days[globalConfig.lang][this.currentDayIndex];
    }
 });
 

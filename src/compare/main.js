@@ -1,5 +1,5 @@
 import SliderControl from './slider_control';
-// import TabControl from './tab_control';
+import TabControl from './tab_control';
 import LegendControl from './legend_control';
 // import ToggleControl from './toggle_control';
 import getTabData from './tab_data';
@@ -32,31 +32,27 @@ function initMap() {
      attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> &copy; OSM contributors'
     });
 
-    tangramLayer.scene.subscribe({
-      load: (ev) => {
+    window.sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
+    window.legend = new LegendControl();
 
-        window.sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
-        window.legend = new LegendControl();
+    sliderControl.addTo(map);
+    legend.addTo(map);
 
-        sliderControl.addTo(map);
-        legend.addTo(map);
-        var tabData
-        // getTabData()
-        // .then(e => {
-        //   tabData = e
-        //   legend.addTo(map);
-        //   legend.update(tabData[0]);
-        //   window.tabControl = new TabControl({position: 'topright', sliderControl: sliderControl, tabs: tabData});
-        //   tabControl.on('tabChange', function (e) {
-        //     legend.update(e.value);
-        //     PopupPanel.updateKey(e.value)
-        //   })
-        //   tabControl.addTo(map);
-        //   var toggle = new ToggleControl();
-        //   toggle.addTo(map);
-        // })
-      }
+    var tabData = getTabData()
+
+
+    window.tabControl = new TabControl({position: 'topright', sliderControl: sliderControl, tabs: tabData});
+    tabControl.on('tabChange', function (e) {
+      PopupPanel.updateKey(e.value)
+      sliderControl.updateTangramForNewScene()
     })
+    tabControl.addTo(map);
+    // tangramLayer.scene.subscribe({
+    //   load: (ev) => {
+
+
+    //   }
+    // })
     tangramLayer.addTo(map)
   }
 
