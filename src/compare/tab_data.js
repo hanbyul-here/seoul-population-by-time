@@ -1,7 +1,8 @@
 import lang from './lang'
 
 function getTabData() {
-  var dates = ['20190304','20200309','20200316','20200323']
+  var dates = ['20200309','20200316','20200323']
+  var keyNames = ['t','f','m','a1','a2','a3','a4','a5','a6']
   var fileNames = ['total','f','m','a1','a2','a3','a4','a5','a6']
 
 
@@ -18,11 +19,11 @@ function getTabData() {
   ]
 
 
-  return fileNames.map((e, idx) => {
+  return keyNames.map((e, idx) => {
     return {
       value: e,
       displayText: labels[idx],
-      files: dates.map(e => '/data/'+dates[idx]+'/'+e+'.json'),
+      files: dates.map(e => '/data/'+e+'/'+fileNames[idx]+'.json'),
       sceneFile: '/compare-year/compare-'+e+'.yaml'
     }
   })

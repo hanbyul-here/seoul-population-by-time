@@ -235,7 +235,6 @@ var SliderControl = L.Control.extend({
   },
 
   getDisplayText: function(s) {
-
      return (globalConfig.lang=='kr')? lang.days[globalConfig.lang][this.currentDayIndex] +'요일 '+ s[8]+s[9]+'시' : s[8]+s[9]+ ' ' + lang.days[globalConfig.lang][this.currentDayIndex];
    }
 });

@@ -22,7 +22,11 @@ var TabControl = L.Control.extend({
       if (i === 0) oneTab.checked = true;
 
       oneTab.onclick = function() {
-        // set the data source first if there is none
+        // stop animation if any going on
+        if (window.intervalID) {
+          clearInterval(window.intervalID);
+          window.intervalID = null;
+        }
         window.tangramLayer.scene.load(e.sceneFile).then(() => {
           self.fire('tabChange', {
             value: e

@@ -19,7 +19,7 @@ function initMap() {
 
     window.tangramLayer = Tangram.leafletLayer({
       scene: {
-        import: './compare.yaml'
+        import: './compare-total.yaml'
      },
      events: {
        click: function(selection) {
@@ -43,7 +43,7 @@ function initMap() {
 
     window.tabControl = new TabControl({position: 'topright', sliderControl: sliderControl, tabs: tabData});
     tabControl.on('tabChange', function (e) {
-      PopupPanel.updateKey(e.value)
+      PopupPanel.updateKey(e.value.files, e.value.value)
       sliderControl.updateTangramForNewScene()
     })
     tabControl.addTo(map);
@@ -89,6 +89,7 @@ function initMap() {
         return tableRowElem;
       }
 
+
       function makeCurrentTimeHeader() {
         var tableRowElem = document.createElement('tr');
         var nameColElem = document.createElement('h5');
@@ -125,8 +126,11 @@ function initMap() {
         return tableRowElem;
       }
 
-      function updateKey(key) {
-        dataKey = key
+      function updateKey(files, value) {
+        fetch(files[0]).then(res => res.json()).then(e => data2020W2 = e)
+        fetch(files[1]).then(res => res.json()).then(e => data2020W3 = e)
+        fetch(files[2]).then(res => res.json()).then(e => data2020W4 = e)
+        dataKey = value
       }
 
       function jsonToTable(obj) {
@@ -191,7 +195,8 @@ function initMap() {
 
   function getDisplayTextWODay(s) {
     s = s+'';
-    return s[0]+s[1]+s[2]+s[3]+'/'+s[4]+s[5] + '/' + s[6] +s[7] + '  '+ s[8]+s[9]+'시';
+    var currentDayIndex = sliderControl.getIndex()
+    return (globalConfig.lang=='kr')? lang.days[globalConfig.lang][currentDayIndex] +'요일 '+ s[8]+s[9]+'시' : s[8]+s[9]+ ' ' + lang.days[globalConfig.lang][currentDayIndex];
   }
 
   initMap();
