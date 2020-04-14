@@ -43,7 +43,7 @@ function initMap() {
 
     window.tabControl = new TabControl({position: 'topright', sliderControl: sliderControl, tabs: tabData});
     tabControl.on('tabChange', function (e) {
-      PopupPanel.updateKey(e.value.files, e.value.value, e.value.label)
+      PopupPanel.updateKey(e.value.files, e.value.value,e.value.displayText)
       sliderControl.updateTangramForNewScene()
     })
     tabControl.addTo(map);
@@ -68,18 +68,7 @@ function initMap() {
       fetch('/data/'+compareW2+'/total.json').then(res => res.json()).then(e => data2020W2 = e)
       fetch('/data/'+compareW3+'/total.json').then(res => res.json()).then(e => data2020W3 = e)
       fetch('/data/'+compareW4+'/total.json').then(res => res.json()).then(e => data2020W4 = e)
-      var displayKey = {
-        t:lang.total[globalConfig.lang],
-        f:lang.sexItems[globalConfig.lang][0],
-        m:lang.sexItems[globalConfig.lang][1],
-        r: lang.residenceItems[globalConfig.lang][1],
-        a1: lang.ageItems[globalConfig.lang][0],
-        a2: lang.ageItems[globalConfig.lang][1],
-        a3: lang.ageItems[globalConfig.lang][2],
-        a4: lang.ageItems[globalConfig.lang][3],
-        a5: lang.ageItems[globalConfig.lang][4],
-        a6: lang.ageItems[globalConfig.lang][5]
-      }
+      var displayKey = lang.total[globalConfig.lang];
       var keys = ['t','f','m','a1','a2','a3','a4','a5','a6']
 
       function makeDongHeader(obj) {
@@ -197,7 +186,7 @@ function initMap() {
 
   function getDisplayTextWODay(s) {
     s = s+'';
-    var currentDayIndex = sliderControl.getIndex()
+    var currentDayIndex = sliderControl.getDayIndex()
     return (globalConfig.lang=='kr')? lang.days[globalConfig.lang][currentDayIndex] +'요일 '+ s[8]+s[9]+'시' : s[8]+s[9]+ ' ' + lang.days[globalConfig.lang][currentDayIndex];
   }
 
