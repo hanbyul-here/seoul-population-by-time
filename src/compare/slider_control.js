@@ -144,7 +144,6 @@ var SliderControl = L.Control.extend({
     }
 
     timeSliderDiv.noUiSlider.on('change', function ( values, handle ) {
-      //TO DO: change the currentslidervalue
       let idx = Math.floor(values[handle]);
       self.currentTimeIndex = idx;
       self.currentSlideValue = getTimeIndex(self.currentDayIndex, self.currentTimeIndex);
@@ -154,9 +153,10 @@ var SliderControl = L.Control.extend({
     });
 
     daySliderDiv.noUiSlider.on('change', function ( values, handle ) {
-      //TO DO: change the currentslidervalue
       let idx = Math.floor(values[handle]);
+
       self.currentDayIndex = idx;
+      self.currentSlideValue = getTimeIndex(self.currentDayIndex, self.currentTimeIndex);
       self.currentDayTime = totalTimeRange[getTimeIndex(self.currentDayIndex, self.currentTimeIndex)];
 
       self.updateTangram(totalTimeRange.indexOf(self.currentDayTime));
@@ -247,8 +247,5 @@ function getTimeIndex(d, t) {
   return (d*24 + t);
 }
 
-function getCurrentSlideValue(timeIndex, dayIndex) {
-  return timeIndex
-}
 
 export default SliderControl;
