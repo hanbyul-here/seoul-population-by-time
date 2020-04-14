@@ -13,13 +13,15 @@ var ToggleControl = L.Control.extend({
     },
     onAdd: function () {
       var container = L.DomUtil.create('div', 'toggle-container')
+      var openPanelText = (globalConfig.lang=='kr')? '컨트롤 열기' : 'Open Panel';
+      var closePanelText = (globalConfig.lang=='kr')? '컨트롤 닫기' : 'Close Panel';
       var button = L.DomUtil.create('button', 'toggle');
-      button.textContent = 'Open Panel';
+      button.textContent = openPanelText;
       var self = this;
       button.addEventListener('click', function (e) {
         L.DomEvent.stopPropagation(e);
         self.openPanel = !self.openPanel;
-        button.textContent = (self.openPanel) ? 'Close Panel' : 'Open Panel';
+        button.textContent = (self.openPanel) ? closePanelText: openPanelText
         if (self.openPanel) {
           self.show(self.sliderControl)
           self.show(self.tabControl)

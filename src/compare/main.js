@@ -1,7 +1,7 @@
 import SliderControl from './slider_control';
 import TabControl from './tab_control';
 import LegendControl from './legend_control';
-// import ToggleControl from './toggle_control';
+import ToggleControl from './toggle_control';
 import getTabData from './tab_data';
 import {formatNumber} from './util'
 import lang from './lang'
@@ -47,6 +47,9 @@ function initMap() {
       sliderControl.updateTangramForNewScene()
     })
     tabControl.addTo(map);
+
+    var toggleControl = new ToggleControl()
+    toggleControl.addTo(map)
     // tangramLayer.scene.subscribe({
     //   load: (ev) => {
 
