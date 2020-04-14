@@ -19,7 +19,7 @@ function initMap() {
 
     window.tangramLayer = Tangram.leafletLayer({
       scene: {
-        import: './compare-total.yaml'
+        import: './compare-t.yaml'
      },
      events: {
        click: function(selection) {
