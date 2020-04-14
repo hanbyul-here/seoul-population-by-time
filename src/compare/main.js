@@ -43,7 +43,7 @@ function initMap() {
 
     window.tabControl = new TabControl({position: 'topright', sliderControl: sliderControl, tabs: tabData});
     tabControl.on('tabChange', function (e) {
-      PopupPanel.updateKey(e.value.files, e.value.value)
+      PopupPanel.updateKey(e.value.files, e.value.value, e.value.label)
       sliderControl.updateTangramForNewScene()
     })
     tabControl.addTo(map);
@@ -61,7 +61,8 @@ function initMap() {
       var data2020W2;
       var data2020W3;
       var data2020W4;
-      var dataKey = 't'
+      var dataKey = 't';
+      var displayKey=lang.total[globalConfig.lang];
 
       fetch('/data/'+date2019+'/whole.json').then(res => res.json()).then(e => popData = e)
       fetch('/data/'+compareW2+'/total.json').then(res => res.json()).then(e => data2020W2 = e)
@@ -93,7 +94,7 @@ function initMap() {
       function makeCurrentTimeHeader() {
         var tableRowElem = document.createElement('tr');
         var nameColElem = document.createElement('h5');
-        nameColElem.textContent = getDisplayTextWODay(sliderControl.getNow());
+        nameColElem.textContent = getDisplayTextWODay(sliderControl.getNow()) + ' ' + displayKey;
         tableRowElem.appendChild(nameColElem);
         return tableRowElem;
       }
@@ -126,11 +127,12 @@ function initMap() {
         return tableRowElem;
       }
 
-      function updateKey(files, value) {
+      function updateKey(files, value, label) {
         fetch(files[0]).then(res => res.json()).then(e => data2020W2 = e)
         fetch(files[1]).then(res => res.json()).then(e => data2020W3 = e)
         fetch(files[2]).then(res => res.json()).then(e => data2020W4 = e)
         dataKey = value
+        displayKey = label
       }
 
       function jsonToTable(obj) {
