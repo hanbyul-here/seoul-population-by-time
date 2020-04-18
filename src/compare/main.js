@@ -5,7 +5,6 @@ import ToggleControl from './toggle_control';
 import getTabData from './tab_data';
 import {formatNumber} from './util'
 import lang from './lang'
-console.log(lang)
 
 var date2019 = '20190304'
 var compareW2 = '20200309'
