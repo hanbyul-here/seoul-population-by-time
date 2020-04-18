@@ -5,6 +5,7 @@ import ToggleControl from './toggle_control';
 import getTabData from './tab_data';
 import {formatNumber} from './util'
 import lang from './lang'
+console.log(lang)
 
 var date2019 = '20190304'
 var compareW2 = '20200309'
@@ -102,17 +103,13 @@ function initMap() {
         nameColElem.classList.add('legend-box');
         valueColElem.classList.add('value');
 
+        nameColElem.textContent = key
+
         var index = sliderControl.getIndex();
-        if(data) {
-          name.textContent = key;
-
-          nameColElem.appendChild(name);
-
+        if(data[index]) {
           valueColElem.textContent = formatNumber(data[index]);
         } else {
-          nameColElem.textContent = displayKey['r'];
-          nameColElem.classList.add('r');
-          valueColElem.textContent = key;
+          valueColElem.textContent = lang.loading[globalConfig.lang];
         }
         tableRowElem.appendChild(nameColElem);
         tableRowElem.appendChild(valueColElem);
@@ -143,13 +140,16 @@ function initMap() {
 
         var timeHeader = makeCurrentTimeHeader();
         wrapperTableElem.appendChild(timeHeader);
+        console.log(lang.week2019[globalConfig.lang])
         keys.forEach(e => {
           if(e == dataKey) {
-            var compareTableRowElem = makeRow(compareDong[e], '19년3월2째주', 'color2019');
+            console.log(globalConfig.lang)
+            console.log(lang.week2019)
+            var compareTableRowElem = makeRow(compareDong[e], lang.week2019[globalConfig.lang], 'color2019');
 
-            var tableRow2Elem = makeRow(w2[e], '20년3월2째주', 'color2020w2');
-            var tableRow3Elem = makeRow(w3[e], '20년3월3째주', 'color2020w3');
-            var tableRow4Elem = makeRow(w4[e], '20년3월4째주', 'color2020w4');
+            var tableRow2Elem = makeRow(w2[e], lang.weeks2020[globalConfig.lang][0], 'color2020w2');
+            var tableRow3Elem = makeRow(w3[e], lang.weeks2020[globalConfig.lang][1], 'color2020w3');
+            var tableRow4Elem = makeRow(w4[e], lang.weeks2020[globalConfig.lang][2], 'color2020w4');
 
             wrapperTableElem.appendChild(compareTableRowElem);
             wrapperTableElem.appendChild(tableRow2Elem);
@@ -158,9 +158,6 @@ function initMap() {
 
           }
         })
-
-        // wrapperTableElem.appendChild(residentRow);
-
 
         return wrapperTableElem;
       }
