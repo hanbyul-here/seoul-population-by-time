@@ -43,7 +43,7 @@ function initMap() {
     });
 
     window.sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
-    window.legend = new LegendControl({position: 'bottomright'});
+    window.legend = new LegendControl({position: 'topright'});
 
     sliderControl.addTo(map);
 

@@ -1,7 +1,7 @@
 const lang = {
   "title": {
     "kr":"서울생활인구",
-    "en": "Seoul Poplution By time"
+    "en": "Seoul Poplution By Hour"
   },
   "play":{
     "kr":"재생하기",
