@@ -5,6 +5,7 @@ const colors2020 = ['#f6e8c3', '#d8b365', '#a6611a']
 
 var LegendControl = L.Control.extend({
     initialize: function(opts) {
+      L.Util.setOptions(this, opts);
       this.currentLegend='total';
      },
 
@@ -12,6 +13,18 @@ var LegendControl = L.Control.extend({
       this.containerDiv = L.DomUtil.create('div', 'container');
       L.DomEvent.disableClickPropagation(this.containerDiv);
 
+      var titleH = L.DomUtil.create('h1');
+      titleH.textContent = lang.title[globalConfig.lang];
+
+      var linkToGithub = L.DomUtil.create('a', 'github-link f-right')
+      linkToGithub.href = "https://github.com/hanbyul-here/seoul-population-by-time"
+      linkToGithub.title = lang.github[globalConfig.lang]
+      var githubLogo = L.DomUtil.create('img')
+      githubLogo.src = "/github-mark.png"
+      linkToGithub.appendChild(githubLogo)
+
+      this.containerDiv.appendChild(titleH)
+      this.containerDiv.appendChild(linkToGithub)
       var unitWrapper = L.DomUtil.create('div', 'legend-wrapper');
       var legendBox =  L.DomUtil.create('div',  'legend unit colorpast');
 

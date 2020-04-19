@@ -54,6 +54,20 @@ styles:
     alpha_polygons:
         base: polygons
         blend: multiply
+    hoverStyle:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_offset: 1.
+            blocks:
+                color: |
+                    float code = color.x*255. + color.y*255.;
+                    float a = ceil(abs(floor(code - u_offset)));
+                    color.rgba = vec4(0.35, 0.35, 0.35, 1. - a);
     dongStyle:
         base: polygons
         animated: true
@@ -233,23 +247,28 @@ layers:
               order: 4
               color: '#ffffff'
               width: [[7,0.0px], [10, .5px], [15, .75px], [17, 5m]]
-    dongoutline:
+    dong:
         data: { source: dong_outline }
         draw:
             lines:
-                order: 29
+                order: 20
                 width: 3px
                 color: '#999'
-            alpha_polygons:
+            hoverStyle:
                 interactive: true
-                order: 29
-                width: 3px
-                color: white
-        dongoutline_hightlited:
-            filter: { name: global.highlighted_dong }
-            draw:
-                lines:
-                    color: '#999'
+                order: 19
+                color: |
+                    function () {
+                        var id = feature.id;
+                        var rValue, gValue = 0;
+                        if(id > 255) {
+                            rValue = 255;
+                            gValue = id%255;
+                        } else {
+                            rValue = id
+                        }
+                        return [rValue/255, gValue/255, 0]
+                    }
     # dong:
     #     data: { source: hex }
     #     draw:

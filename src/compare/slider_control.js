@@ -38,15 +38,6 @@ var SliderControl = L.Control.extend({
 
   onAdd: function(map) {
     var containerDiv = L.DomUtil.create('div', 'whole-container');
-    var titleH = L.DomUtil.create('h1');
-    titleH.textContent = lang.title[globalConfig.lang];
-
-    var linkToGithub = L.DomUtil.create('a', 'github-link f-right')
-    linkToGithub.href = "https://github.com/hanbyul-here/seoul-population-by-time"
-    linkToGithub.title = lang.github[globalConfig.lang]
-    var githubLogo = L.DomUtil.create('img')
-    githubLogo.src = "/github-mark.png"
-    linkToGithub.appendChild(githubLogo)
 
     var timeH = L.DomUtil.create('h3','time-h');
     timeH.id = 'timeLabel';
@@ -119,12 +110,12 @@ var SliderControl = L.Control.extend({
     var playButton = L.DomUtil.create('button');
     playButton.id = 'play';
     playButton.classList.add('f-left');
-    playButton.textContent = 'play';
+    playButton.textContent = lang.play[globalConfig.lang];
 
     var pauseButton = L.DomUtil.create('button');
     pauseButton.id = 'pause';
     pauseButton.classList.add('f-left');
-    pauseButton.textContent = 'pause';
+    pauseButton.textContent = lang.pause[globalConfig.lang];
 
     buttonWrapper.appendChild(playButton)
     buttonWrapper.appendChild(pauseButton)
@@ -163,9 +154,6 @@ var SliderControl = L.Control.extend({
       timeH.textContent = self.getDisplayText(self.currentDayTime);
     });
     L.DomEvent.disableClickPropagation(containerDiv);
-
-    containerDiv.appendChild(titleH);
-    containerDiv.appendChild(linkToGithub)
 
     sliderContainer.appendChild(dateLabel);
     sliderContainer.appendChild(timeSliderDiv);

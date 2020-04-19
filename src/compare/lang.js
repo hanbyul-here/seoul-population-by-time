@@ -3,6 +3,14 @@ const lang = {
     "kr":"서울생활인구",
     "en": "Seoul Poplution By time"
   },
+  "play":{
+    "kr":"재생하기",
+    "en":"play",
+  },
+  "pause":{
+    "kr":"멈추기",
+    "en":"pause"
+  },
   "legend": {
     "kr":"생활인구",
     "en": "legends"

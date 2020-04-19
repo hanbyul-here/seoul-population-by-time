@@ -1,5 +1,6 @@
 var TabControl = L.Control.extend({
   initialize: function(opts) {
+    L.Util.setOptions(this, opts);
     this.tangramLayer = tangramLayer;
     this.sliderControl = opts.sliderControl;
     this.tabs = opts.tabs;
