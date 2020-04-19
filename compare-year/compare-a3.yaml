@@ -95,7 +95,7 @@ styles:
                   vec4 data_interpol = mix(data_now,data_next,f_now);
 
                   position.z = ceil(position.z/500.);
-                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*3000.);
+                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
   style2020_1:
       base: polygons
       animated: true
@@ -132,7 +132,7 @@ styles:
                   vec4 data_interpol = mix(data_now,data_next,f_now);
 
                   position.z = ceil(position.z/500.);
-                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*3000.);
+                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
   style2020_2:
       base: polygons
       animated: true
@@ -169,7 +169,7 @@ styles:
                   vec4 data_interpol = mix(data_now,data_next,f_now);
 
                   position.z = ceil(position.z/500.);
-                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*3000.);
+                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
   style2020_3:
       base: polygons
       animated: true
@@ -206,7 +206,7 @@ styles:
                   vec4 data_interpol = mix(data_now,data_next,f_now);
 
                   position.z = ceil(position.z/500.);
-                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*3000.);
+                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
 
 cameras:
   camera1:
