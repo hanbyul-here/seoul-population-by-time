@@ -12,13 +12,17 @@ var compareW3 = '20200316'
 var compareW4 = '20200323'
 var compares = [compareW2, compareW3, compareW4]
 
+window.selectedDongID = 200000;
 
 function onTangramClick (selection) {
   if (selection.feature) {
+
     var popup = L.popup()
               .setLatLng(selection.leaflet_event.latlng)
               .setContent(PopupPanel.jsonToTable(selection.feature.properties))
               .openOn(map);
+
+    window.selectedDongID = selection.feature.properties.id
     window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = selection.feature.properties.id;
   } else {
     window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = 2000000;
@@ -56,6 +60,7 @@ function initMap() {
       PopupPanel.updateKey(e.value.files, e.value.value,e.value.displayText)
       sliderControl.updateTangramForNewScene()
       legend.updateTangram()
+      window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = window.selectedDongID;
     })
     tabControl.addTo(map);
     legend.addTo(map);
