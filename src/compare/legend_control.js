@@ -7,9 +7,11 @@ var LegendControl = L.Control.extend({
     initialize: function(opts) {
       L.Util.setOptions(this, opts);
       this.currentLegend='total';
+      this.checkedKeyValue = {}
      },
 
     onAdd: function(map) {
+      var self = this
       this.containerDiv = L.DomUtil.create('div', 'container');
       L.DomEvent.disableClickPropagation(this.containerDiv);
 
@@ -27,11 +29,24 @@ var LegendControl = L.Control.extend({
       this.containerDiv.appendChild(linkToGithub)
       var unitWrapper = L.DomUtil.create('div', 'legend-wrapper');
       var legendBox =  L.DomUtil.create('div',  'legend unit colorpast');
+      var legendCheck = L.DomUtil.create('input')
+      legendCheck.type = 'checkbox'
+      legendCheck.value = 'show2019Data'
+      legendCheck.checked = 'true'
+      this.checkedKeyValue['show2019Data'] = true
+
+      legendCheck.onclick = function(e) {
+        var keyName = this.value
+        self.checkedKeyValue[keyName] = e.target.checked
+        window.tangramLayer.scene.config.global[keyName] = e.target.checked
+        window.tangramLayer.scene.updateConfig()
+      }
 
       var legendTitle = L.DomUtil.create('h4', 'legend-title is-inline');
       legendTitle.textContent = '2019년 3월 2째주';
 
       unitWrapper.appendChild(legendBox)
+      unitWrapper.appendChild(legendCheck)
       unitWrapper.appendChild(legendTitle)
       this.containerDiv.appendChild(unitWrapper)
 
@@ -41,10 +56,26 @@ var LegendControl = L.Control.extend({
         var legendBox2020 =  L.DomUtil.create('div',  'legend unit');
         legendBox2020.style.backgroundColor=colors2020[i]
 
+
+        var legendCheck = L.DomUtil.create('input')
+        legendCheck.type = 'checkbox'
+        legendCheck.value = 'show2020Data'+(i+1)
+        legendCheck.checked = 'true'
+
+        this.checkedKeyValue['show2020Data'+(i+1)] = true
+
+        legendCheck.onclick = function(e) {
+          var keyName = this.value
+          self.checkedKeyValue[keyName] = e.target.checked
+          window.tangramLayer.scene.config.global[keyName] = e.target.checked
+          window.tangramLayer.scene.updateConfig()
+        }
+
         var legendTitle2020 = L.DomUtil.create('h4', 'legend-title is-inline');
         var weekNum = i + 2
         legendTitle2020.textContent = '2020년 3월 '+weekNum+'째주';
         wrapper.appendChild(legendBox2020)
+        wrapper.appendChild(legendCheck)
         wrapper.appendChild(legendTitle2020)
         unitWrapper2020.appendChild(wrapper)
 
@@ -76,14 +107,11 @@ var LegendControl = L.Control.extend({
 
     },
 
-    update: function(tab) {
-      this.containerDiv.innerHTML = '';
-      this.currentLegend = tab;
-      var self = this;
-      tab.data.map((elem, i) => {
-        var legendUnitDiv = self.makeLegendUnit(elem);
-        self.containerDiv.appendChild(legendUnitDiv);
-      })
+    updateTangram: function() {
+      for(var key in this.checkedKeyValue) {
+        tangramLayer.scene.config.global[key] = this.checkedKeyValue[key]
+        tangramLayer.scene.updateConfig()
+      }
     }
 
   });

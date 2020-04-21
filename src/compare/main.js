@@ -55,6 +55,7 @@ function initMap() {
     tabControl.on('tabChange', function (e) {
       PopupPanel.updateKey(e.value.files, e.value.value,e.value.displayText)
       sliderControl.updateTangramForNewScene()
+      legend.updateTangram()
     })
     tabControl.addTo(map);
     legend.addTo(map);

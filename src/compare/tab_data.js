@@ -4,6 +4,7 @@ function getTabData() {
   var dates = ['20200309','20200316','20200323']
   var keyNames = ['t','f','m','a1','a2','a3','a4','a5','a6']
   var fileNames = ['total','f','m','a1','a2','a3','a4','a5','a6']
+  var imageNames = ['total','female','male','a10','a20','a30','a40','a50','a60']
 
 
   var labels = [
@@ -24,7 +25,11 @@ function getTabData() {
       value: e,
       displayText: labels[idx],
       files: dates.map(e => '/data/'+e+'/'+fileNames[idx]+'.json'),
-      sceneFile: '/compare-year/compare-'+e+'.yaml'
+      sceneFile: '/compare-year/compare-'+e+'.yaml',
+      imagePath2019: '/data/20190304/' +imageNames[idx]+'.png',
+      imagePath2020_1:'/data/20200309/' +imageNames[idx]+'.png',
+      imagePath2020_2:'/data/20200316/' +imageNames[idx]+'.png',
+      imagePath2020_3:'/data/20200323/' +imageNames[idx]+'.png'
     }
   })
 }
