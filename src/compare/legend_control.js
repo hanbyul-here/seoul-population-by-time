@@ -43,7 +43,7 @@ var LegendControl = L.Control.extend({
       }
 
       var legendTitle = L.DomUtil.create('h4', 'legend-title is-inline');
-      legendTitle.textContent = '2019년 3월 2째주';
+      legendTitle.textContent = lang.week2019[globalConfig.lang];
 
       unitWrapper.appendChild(legendBox)
       unitWrapper.appendChild(legendCheck)
@@ -73,7 +73,7 @@ var LegendControl = L.Control.extend({
 
         var legendTitle2020 = L.DomUtil.create('h4', 'legend-title is-inline');
         var weekNum = i + 2
-        legendTitle2020.textContent = '2020년 3월 '+weekNum+'째주';
+        legendTitle2020.textContent = lang.weeks2020[globalConfig.lang][i]//'2020년 3월 '+weekNum+'째주';
         wrapper.appendChild(legendBox2020)
         wrapper.appendChild(legendCheck)
         wrapper.appendChild(legendTitle2020)

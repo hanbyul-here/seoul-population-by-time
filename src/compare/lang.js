@@ -37,11 +37,11 @@ const lang = {
   },
   "week2019": {
     "kr": '19년3월2째주',
-    "en": '2nd w March, 2019'
+    "en": '2nd Week March, 2019'
   },
   "weeks2020": {
     "kr": ['20년3월2째주','20년3월3째주','20년3월4째주'],
-    "en": ['2nd w March, 2020','3rd w March, 2020','4th w March, 2020']
+    "en": ['2nd week March, 2020','3rd week March, 2020','4th week March, 2020']
   },
   "ages": {
     "kr":"연령군별",
