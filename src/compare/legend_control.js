@@ -74,6 +74,7 @@ var LegendControl = L.Control.extend({
           window.tangramLayer.scene.config.global[keyName] = e.target.checked
           window.tangramLayer.scene.updateConfig().then(()=> {
             window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = window.selectedDongID
+            window.sliderControl.updateTangramForNewScene()
           })
         }
 
