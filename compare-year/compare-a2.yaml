@@ -2,152 +2,92 @@
 #   - https://www.nextzen.org/carto/refill-style/11/refill-style.zip
 #   - https://www.nextzen.org/carto/refill-style/themes/color-zinc.zip
 textures:
-  data_image:
-      url: /data/20190304/a20.png
-  data_2020_0309_image:
-      url: /data/20200309/a20.png
-  data_2020_0316_image:
-      url: /data/20200316/a20.png
-  data_2020_0323_image:
-      url: /data/20200323/a20.png
+    data_image:
+        url: /data/20190304/a20.png
+    data_2020_0309_image:
+        url: /data/20200309/a20.png
+    data_2020_0316_image:
+        url: /data/20200316/a20.png
+    data_2020_0323_image:
+        url: /data/20200323/a20.png
+global:
+    show2019Data: true
+    show2020Data1: true
+    show2020Data2: true
+    show2020Data3: true
 sources:
-  nextzen_vector_tile:
-    type: MVT
-    url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
-  dong_outline:
-      type: GeoJSON
-      url: /geometries/new_dong.json
-  half_hex_1:
-      type: GeoJSON
-      url: /geometries/half_hex_1.json
-  tri_1:
-      type: GeoJSON
-      url: /geometries/tri_1.json
-  tri_2:
-      type: GeoJSON
-      url: /geometries/tri_6.json
-  tri_3:
-      type: GeoJSON
-      url: /geometries/tri_5.json
-  # male_source:
-  #     type: GeoJSON
-  #     url: ./male_pop.geojson
-  # age0:
-  #     type: GeoJSON
-  #     url: ./age/age_pop_0.geojsons
-  # age1:
-  #     type: GeoJSON
-  #     url: ./age/age_pop_1.geojson
-  # age2:
-  #     type: GeoJSON
-  #     url: ./age/age_pop_2.geojson
-  # age3:
-  #     type: GeoJSON
-  #     url: ./age/age_pop_3.geojson
-  # age4:
-  #     type: GeoJSON
-  #     url: ./age/age_pop_4.geojson
-  # age5:
-  #     type: GeoJSON
-  #     url: ./age/age_pop_5.geojson
+    nextzen_vector_tile:
+      type: MVT
+      url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt?api_key=hx2J5tx6QDS1Pnhu8r97JQ
+    dong_outline:
+        type: GeoJSON
+        url: /geometries/new_dong.json
+    half_hex_1:
+        type: GeoJSON
+        url: /geometries/half_hex_1.json
+    tri_1:
+        type: GeoJSON
+        url: /geometries/tri_1.json
+    tri_2:
+        type: GeoJSON
+        url: /geometries/tri_6.json
+    tri_3:
+        type: GeoJSON
+        url: /geometries/tri_5.json
+    # male_source:
+    #     type: GeoJSON
+    #     url: ./male_pop.geojson
+    # age0:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_0.geojsons
+    # age1:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_1.geojson
+    # age2:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_2.geojson
+    # age3:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_3.geojson
+    # age4:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_4.geojson
+    # age5:
+    #     type: GeoJSON
+    #     url: ./age/age_pop_5.geojson
 styles:
-  alpha_polygons:
-      base: polygons
-      blend: multiply
-  dongStyle:
-      base: polygons
-      animated: true
-      material:
-          ambient: 1.0
-          diffuse: 1.0
-      shaders:
-          uniforms:
-              u_data: data_image
-              u_param: [168, 424]
-              u_offset: 0.
-          blocks:
-              global: |
-                    float getIndex (vec2 encodedIndex) {
-                      return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
-                    }
-                    vec4 getColor (vec2 st) {
-                        float texWidth = u_param.x;
-                        float texHeigth = u_param.y;
-                        st.y = 1.-(st.y/texHeigth);
-                        return texture2D(u_data,vec2(st.x/texWidth,st.y));
-                    }
-                    float random (vec2 st) {
-                        return fract(sin(dot(st.xy,
-                                             vec2(12.9898,78.233)))*
-                            43758.5453123);
-                    }
-              position: |
-                  vec3 pos = worldPosition().xyz;
-
-                  float zz = (position.z - .5);
-                  float t = u_offset;
-                  float i_now = floor(t);
-                  float f_now = fract(t);
-                  float next = i_now+1.;
-
-                  vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
-                  vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
-                  vec4 data_interpol = mix(data_now,data_next,f_now);
-
-                  position.z = ceil(position.z/500.);
-                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
-  style2020_1:
-      base: polygons
-      animated: true
-      material:
-          ambient: 1.0
-          diffuse: 1.0
-      shaders:
-          uniforms:
-              u_data: data_2020_0309_image
-              u_param: [168, 424]
-              u_offset: 0.
-          blocks:
-              global: |
-                    float getIndex (vec2 encodedIndex) {
-                      return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
-                    }
-                    vec4 getColor (vec2 st) {
-                        float texWidth = u_param.x;
-                        float texHeigth = u_param.y;
-                        st.y = 1.-(st.y/texHeigth);
-                        return texture2D(u_data,vec2(st.x/texWidth,st.y));
-                    }
-              position: |
-                  vec3 pos = worldPosition().xyz;
-
-                  float zz = (position.z - .5);
-                  float t = u_offset;
-                  float i_now = floor(t);
-                  float f_now = fract(t);
-                  float next = i_now+1.;
-
-                  vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
-                  vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
-                  vec4 data_interpol = mix(data_now,data_next,f_now);
-
-                  position.z = ceil(position.z/500.);
-                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
-  style2020_2:
-      base: polygons
-      animated: true
-      material:
-          ambient: 1.0
-          diffuse: 1.0
-      shaders:
-          uniforms:
-              u_data: data_2020_0316_image
-              u_param: [168, 424]
-              u_offset: 0.
-          blocks:
-              global: |
+    alpha_polygons:
+        base: polygons
+        blend: multiply
+    hoverStyle:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_offset: 1.
+            blocks:
+                color: |
+                    float code = color.x*255. + color.y*255.;
+                    float a = ceil(abs(floor(code - u_offset)));
+                    color.rgba = vec4(0.35, 0.35, 0.35, 1. - a);
+    dongStyle:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: data_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
                       float getIndex (vec2 encodedIndex) {
-                      return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
                       }
                       vec4 getColor (vec2 st) {
                           float texWidth = u_param.x;
@@ -155,36 +95,41 @@ styles:
                           st.y = 1.-(st.y/texHeigth);
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
-              position: |
-                  vec3 pos = worldPosition().xyz;
+                      float random (vec2 st) {
+                          return fract(sin(dot(st.xy,
+                                               vec2(12.9898,78.233)))*
+                              43758.5453123);
+                      }
+                position: |
+                    vec3 pos = worldPosition().xyz;
 
-                  float zz = (position.z - .5);
-                  float t = u_offset;
-                  float i_now = floor(t);
-                  float f_now = fract(t);
-                  float next = i_now+1.;
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
 
-                  vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
-                  vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
-                  vec4 data_interpol = mix(data_now,data_next,f_now);
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
 
-                  position.z = ceil(position.z/500.);
-                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
-  style2020_3:
-      base: polygons
-      animated: true
-      material:
-          ambient: 1.0
-          diffuse: 1.0
-      shaders:
-          uniforms:
-              u_data: data_2020_0323_image
-              u_param: [168, 424]
-              u_offset: 0.
-          blocks:
-              global: |
+                    position.z = ceil(position.z/500.);
+                    position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
+    style2020_1:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: data_2020_0309_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
                       float getIndex (vec2 encodedIndex) {
-                      return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
                       }
                       vec4 getColor (vec2 st) {
                           float texWidth = u_param.x;
@@ -192,119 +137,198 @@ styles:
                           st.y = 1.-(st.y/texHeigth);
                           return texture2D(u_data,vec2(st.x/texWidth,st.y));
                       }
-              position: |
-                  vec3 pos = worldPosition().xyz;
+                position: |
+                    vec3 pos = worldPosition().xyz;
 
-                  float zz = (position.z - .5);
-                  float t = u_offset;
-                  float i_now = floor(t);
-                  float f_now = fract(t);
-                  float next = i_now+1.;
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
 
-                  vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
-                  vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
-                  vec4 data_interpol = mix(data_now,data_next,f_now);
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
 
-                  position.z = ceil(position.z/500.);
-                  position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
+                    position.z = ceil(position.z/500.);
+                    position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
+    style2020_2:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: data_2020_0316_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
+                        float getIndex (vec2 encodedIndex) {
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                        }
+                        vec4 getColor (vec2 st) {
+                            float texWidth = u_param.x;
+                            float texHeigth = u_param.y;
+                            st.y = 1.-(st.y/texHeigth);
+                            return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                        }
+                position: |
+                    vec3 pos = worldPosition().xyz;
+
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
+                    position.z = ceil(position.z/500.);
+                    position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
+    style2020_3:
+        base: polygons
+        animated: true
+        material:
+            ambient: 1.0
+            diffuse: 1.0
+        shaders:
+            uniforms:
+                u_data: data_2020_0323_image
+                u_param: [168, 424]
+                u_offset: 0.
+            blocks:
+                global: |
+                        float getIndex (vec2 encodedIndex) {
+                        return (encodedIndex.x*65025.+encodedIndex.y*255.)+.5;
+                        }
+                        vec4 getColor (vec2 st) {
+                            float texWidth = u_param.x;
+                            float texHeigth = u_param.y;
+                            st.y = 1.-(st.y/texHeigth);
+                            return texture2D(u_data,vec2(st.x/texWidth,st.y));
+                        }
+                position: |
+                    vec3 pos = worldPosition().xyz;
+
+                    float zz = (position.z - .5);
+                    float t = u_offset;
+                    float i_now = floor(t);
+                    float f_now = fract(t);
+                    float next = i_now+1.;
+
+                    vec4 data_now = getColor(vec2(mod(i_now, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_next = getColor(vec2(mod(next, u_param.x) , mod(zz, u_param.y)));
+                    vec4 data_interpol = mix(data_now,data_next,f_now);
+
+                    position.z = ceil(position.z/500.);
+                    position.z *= abs((data_interpol.r + data_interpol.g  + data_interpol.b)*1500.);
 
 cameras:
-  camera1:
-      type: isometric
-      # axis: [0.1, 0.5]
+    camera1:
+        type: isometric
+        # axis: [0.1, 0.5]
 
 layers:
-  earth:
-    data: { source: nextzen_vector_tile }
-    draw:
-        polygons:
-            color: "#ddd"
-            order: 0
-  water:
-    data: { source: nextzen_vector_tile }
-    draw:
-        polygons:
-            color: "#aaa"
-            order: 1
-  roads:
-    data: { source: nextzen_vector_tile }
-    draw:
-        lines:
-            order: 4
-            color: '#ffffff'
-            width: [[7,0.0px], [10, .5px], [15, .75px], [17, 5m]]
-  dongoutline:
-      data: { source: dong_outline }
+    earth:
+      data: { source: nextzen_vector_tile }
+      draw:
+          polygons:
+              color: "#ddd"
+              order: 0
+    water:
+      data: { source: nextzen_vector_tile }
+      draw:
+          polygons:
+              color: "#aaa"
+              order: 1
+    roads:
+      data: { source: nextzen_vector_tile }
       draw:
           lines:
-              order: 29
-              width: 3px
-              color: '#999'
-          alpha_polygons:
-              interactive: true
-              order: 29
-              width: 3px
-              color: white
-      dongoutline_hightlited:
-          filter: { name: global.highlighted_dong }
-          draw:
-              lines:
-                  color: '#999'
-  # dong:
-  #     data: { source: hex }
-  #     draw:
-  #         dongStyle:
-  #             order: 30
-  #             color: |
-  #               function () {
-  #                 return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
-  #               }
-  #             extrude: |
-  #               function () {
-  #                 return (feature.id + 1) ;
-  #                }
-  time_pop:
-      data: { source: half_hex_1 }
-      enabled: true
-      draw:
-          dongStyle:
-              order: 29
-              color: '#018571'
-              extrude: |
-                function () {
-                  return (feature.id + 1) ;
-                }
-  time_2020_pop_1:
-      data: { source: tri_1 }
-      enabled: true
-      draw:
-          style2020_1:
-              order: 30
-              color: '#f6e8c3'
-              extrude: |
-                function () {
-                  return (feature.id + 1) ;
-                }
-  time_2020_pop_2:
-      data: { source: tri_2 }
-      enabled: true
-      draw:
-          style2020_2:
-              order: 31
-              color: '#d8b365'
-              extrude: |
+              order: 4
+              color: '#ffffff'
+              width: [[7,0.0px], [10, .5px], [15, .75px], [17, 5m]]
+    dong:
+        data: { source: dong_outline }
+        draw:
+            lines:
+                order: 20
+                width: 3px
+                color: '#999'
+            hoverStyle:
+                interactive: true
+                order: 19
+                color: |
+                    function () {
+                        var id = feature.id;
+                        var rValue, gValue = 0;
+                        if(id > 255) {
+                            rValue = 255;
+                            gValue = id%255;
+                        } else {
+                            rValue = id
+                        }
+                        return [rValue/255, gValue/255, 0]
+                    }
+    # dong:
+    #     data: { source: hex }
+    #     draw:
+    #         dongStyle:
+    #             order: 30
+    #             color: |
+    #               function () {
+    #                 return [ ( Math.floor(feature.id/255))/255, (feature.id%255)/255, 0 ]
+    #               }
+    #             extrude: |
+    #               function () {
+    #                 return (feature.id + 1) ;
+    #                }
+    time_pop:
+        data: { source: half_hex_1 }
+        enabled: global.show2019Data
+        draw:
+            dongStyle:
+                order: 29
+                color: '#018571'
+                extrude: |
                   function () {
-                  return (feature.id + 1) ;
+                    return (feature.id + 1) ;
                   }
-  time_2020_pop_3:
-      data: { source: tri_3 }
-      enabled: true
-      draw:
-          style2020_3:
-              order: 32
-              color: '#a6611a'
-              extrude: |
+    time_2020_pop_1:
+        data: { source: tri_1 }
+        enabled: global.show2020Data1
+        draw:
+            style2020_1:
+                order: 30
+                color: '#f6e8c3'
+                extrude: |
                   function () {
-                  return (feature.id + 1) ;
+                    return (feature.id + 1) ;
                   }
+    time_2020_pop_2:
+        data: { source: tri_2 }
+        enabled: global.show2020Data2
+        draw:
+            style2020_2:
+                order: 31
+                color: '#d8b365'
+                extrude: |
+                    function () {
+                    return (feature.id + 1) ;
+                    }
+    time_2020_pop_3:
+        data: { source: tri_3 }
+        enabled: global.show2020Data3
+        draw:
+            style2020_3:
+                order: 32
+                color: '#a6611a'
+                extrude: |
+                    function () {
+                    return (feature.id + 1) ;
+                    }
 

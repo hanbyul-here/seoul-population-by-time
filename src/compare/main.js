@@ -12,6 +12,28 @@ var compareW3 = '20200316'
 var compareW4 = '20200323'
 var compares = [compareW2, compareW3, compareW4]
 
+window.selectedDongID = 200000;
+
+function onTangramClick (selection) {
+  if (selection.feature) {
+
+    var popup = L.popup()
+              .setLatLng(selection.leaflet_event.latlng)
+              .setContent(PopupPanel.jsonToTable(selection.feature.properties))
+              .openOn(map);
+
+    window.selectedDongID = selection.feature.properties.id
+    window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = selection.feature.properties.id;
+  } else {
+    window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = 2000000;
+  }
+}
+
+function onTangramHover(selection) {
+  // if(selection.feature) {
+  //   document.getElementById('map').style.cursor = 'pointer';
+  // }
+}
 function initMap() {
     window.map = L.map('map');
 
@@ -21,22 +43,14 @@ function initMap() {
       scene: {
         import: './compare-t.yaml'
      },
-     events: {
-       click: function(selection) {
-         onTangramClick(selection)
-       },
-       hover: function(selection) {
-         onTangramHover(selection);
-       }
-     },
      attribution: '<a href="https://mapzen.com/tangram" target="_blank">Tangram</a> &copy; OSM contributors'
     });
 
     window.sliderControl = new SliderControl({position: 'topright', tangramLayer: tangramLayer});
-    window.legend = new LegendControl();
+    window.legend = new LegendControl({position: 'topright'});
 
     sliderControl.addTo(map);
-    legend.addTo(map);
+
 
     var tabData = getTabData()
 
@@ -45,18 +59,23 @@ function initMap() {
     tabControl.on('tabChange', function (e) {
       PopupPanel.updateKey(e.value.files, e.value.value,e.value.displayText)
       sliderControl.updateTangramForNewScene()
+      legend.updateTangram()
+      window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = window.selectedDongID;
     })
     tabControl.addTo(map);
-
+    legend.addTo(map);
     var toggleControl = new ToggleControl()
     toggleControl.addTo(map)
-    // tangramLayer.scene.subscribe({
-    //   load: (ev) => {
+    tangramLayer.scene.subscribe({
+      load: (ev) => {
+        window.tangramLayer.setSelectionEvents({
+          click: onTangramClick
+       });
 
-
-    //   }
-    // })
+      }
+    })
     tangramLayer.addTo(map)
+
   }
 
   var PopupPanel = (function () {
@@ -139,11 +158,9 @@ function initMap() {
 
         var timeHeader = makeCurrentTimeHeader();
         wrapperTableElem.appendChild(timeHeader);
-        console.log(lang.week2019[globalConfig.lang])
+
         keys.forEach(e => {
           if(e == dataKey) {
-            console.log(globalConfig.lang)
-            console.log(lang.week2019)
             var compareTableRowElem = makeRow(compareDong[e], lang.week2019[globalConfig.lang], 'color2019');
 
             var tableRow2Elem = makeRow(w2[e], lang.weeks2020[globalConfig.lang][0], 'color2020w2');
@@ -168,20 +185,6 @@ function initMap() {
 
   })();
 
-
-  function onTangramClick (selection) {
-    if (selection.feature) {
-
-      var popup = L.popup()
-                .setLatLng(selection.leaflet_event.latlng)
-                .setContent(PopupPanel.jsonToTable(selection.feature.properties))
-                .openOn(map);
-    }
-  }
-
-  function onTangramHover(selection) {
-    document.getElementById('map').style.cursor = selection.feature ? 'pointer' : '';
-  }
 
   function getDisplayTextWODay(s) {
     s = s+'';

@@ -1,5 +1,6 @@
 var TabControl = L.Control.extend({
   initialize: function(opts) {
+    L.Util.setOptions(this, opts);
     this.tangramLayer = tangramLayer;
     this.sliderControl = opts.sliderControl;
     this.tabs = opts.tabs;
@@ -27,6 +28,16 @@ var TabControl = L.Control.extend({
           clearInterval(window.intervalID);
           window.intervalID = null;
         }
+
+        // window.tangramLayer.scene.config.textures.data_image.url = e.imagePath2019
+        // window.tangramLayer.scene.config.textures.data_2020_0309_image.url = e.imagePath2020_1
+        // window.tangramLayer.scene.config.textures.data_2020_0316_image.url = e.imagePath2020_2
+        // window.tangramLayer.scene.config.textures.data_2020_0323_image.url = e.imagePath2020_3
+        // updateConfig().then(()=> {
+        //   self.fire('tabChange', {
+        //     value: e
+        //   })
+        // })
         window.tangramLayer.scene.load(e.sceneFile).then(() => {
           self.fire('tabChange', {
             value: e
