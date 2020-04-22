@@ -23,7 +23,7 @@ function onTangramClick (selection) {
               .openOn(map);
 
     window.selectedDongID = selection.feature.properties.id
-    window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = selection.feature.properties.id;
+    window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = window.selectedDongID
   } else {
     window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = 2000000;
   }

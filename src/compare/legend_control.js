@@ -39,7 +39,10 @@ var LegendControl = L.Control.extend({
         var keyName = this.value
         self.checkedKeyValue[keyName] = e.target.checked
         window.tangramLayer.scene.config.global[keyName] = e.target.checked
-        window.tangramLayer.scene.updateConfig()
+        window.tangramLayer.scene.updateConfig().then(()=> {
+          console.log("yoy")
+          window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = window.selectedDongID
+        })
       }
 
       var legendTitle = L.DomUtil.create('h4', 'legend-title is-inline');
@@ -68,7 +71,9 @@ var LegendControl = L.Control.extend({
           var keyName = this.value
           self.checkedKeyValue[keyName] = e.target.checked
           window.tangramLayer.scene.config.global[keyName] = e.target.checked
-          window.tangramLayer.scene.updateConfig()
+          window.tangramLayer.scene.updateConfig().then(()=> {
+            window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = window.selectedDongID
+          })
         }
 
         var legendTitle2020 = L.DomUtil.create('h4', 'legend-title is-inline');
