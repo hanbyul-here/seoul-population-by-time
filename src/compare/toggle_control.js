@@ -25,11 +25,9 @@ var ToggleControl = L.Control.extend({
         if (self.openPanel) {
           self.show(self.sliderControl)
           self.show(self.tabControl)
-          self.show(self.legendControl)
         } else {
           self.hide(self.sliderControl)
           self.hide(self.tabControl)
-          self.hide(self.legendControl)
         }
 
       })
