@@ -7,6 +7,7 @@ var LegendControl = L.Control.extend({
     initialize: function(opts) {
       L.Util.setOptions(this, opts);
       this.currentLegend='total';
+      this.sliderControl = opts.sliderControl
       this.checkedKeyValue = {}
      },
 
@@ -40,8 +41,8 @@ var LegendControl = L.Control.extend({
         self.checkedKeyValue[keyName] = e.target.checked
         window.tangramLayer.scene.config.global[keyName] = e.target.checked
         window.tangramLayer.scene.updateConfig().then(()=> {
-          console.log("yoy")
           window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = window.selectedDongID
+          window.sliderControl.updateTangramForNewScene()
         })
       }
 
@@ -115,8 +116,8 @@ var LegendControl = L.Control.extend({
     updateTangram: function() {
       for(var key in this.checkedKeyValue) {
         tangramLayer.scene.config.global[key] = this.checkedKeyValue[key]
-        tangramLayer.scene.updateConfig()
       }
+      return tangramLayer.scene.updateConfig()
     }
 
   });

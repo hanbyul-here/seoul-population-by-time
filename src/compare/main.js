@@ -58,9 +58,10 @@ function initMap() {
     window.tabControl = new TabControl({position: 'topright', sliderControl: sliderControl, tabs: tabData});
     tabControl.on('tabChange', function (e) {
       PopupPanel.updateKey(e.value.files, e.value.value,e.value.displayText)
-      sliderControl.updateTangramForNewScene()
-      legend.updateTangram()
-      window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = window.selectedDongID;
+      legend.updateTangram().then(() => {
+        window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = window.selectedDongID;
+        sliderControl.updateTangramForNewScene()
+      })
     })
     tabControl.addTo(map);
     legend.addTo(map);

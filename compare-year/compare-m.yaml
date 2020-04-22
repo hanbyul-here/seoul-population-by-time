@@ -67,7 +67,7 @@ styles:
             diffuse: 1.0
         shaders:
             uniforms:
-                u_offset: 1.
+                u_offset:  20000.
             blocks:
                 color: |
                     float code = color.x*255. + color.y*255.;

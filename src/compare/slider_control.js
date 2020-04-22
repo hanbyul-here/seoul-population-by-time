@@ -208,6 +208,7 @@ var SliderControl = L.Control.extend({
     var self = this;
     if(!window.intervalID) {
       this.currentSlideValue = totalTimeRange.indexOf(self.currentDayTime);
+      console.log(this.currentSlideValue)
       this.updateTangram(this.currentSlideValue);
       window.intervalID = setInterval(function() {
         self.animate(timeSlider, daySlider, timeH)
@@ -215,7 +216,7 @@ var SliderControl = L.Control.extend({
     }
   },
   updateTangramForNewScene: function(){
-    this.updateTangram(totalTimeRange.indexOf(this.currentDayTime))
+    this.updateTangram(this.currentSlideValue)
   },
 
   updateTangram: function(idx) {
@@ -223,6 +224,7 @@ var SliderControl = L.Control.extend({
     tangramLayer.scene.styles.style2020_1.shaders.uniforms.u_offset = idx;
     tangramLayer.scene.styles.style2020_2.shaders.uniforms.u_offset = idx;
     tangramLayer.scene.styles.style2020_3.shaders.uniforms.u_offset = idx;
+
   },
 
   getDisplayText: function(s) {
