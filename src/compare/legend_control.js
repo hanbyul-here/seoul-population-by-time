@@ -1,7 +1,7 @@
 import {formatNumber} from './util'
 import lang from './lang'
 
-const colors2020 = ['#f6e8c3', '#d8b365', '#a6611a']
+const colors2020 = ['#a6611a', '#d8b365', '#f6e8c3']
 
 var LegendControl = L.Control.extend({
     initialize: function(opts) {
@@ -63,10 +63,10 @@ var LegendControl = L.Control.extend({
 
         var legendCheck = L.DomUtil.create('input')
         legendCheck.type = 'checkbox'
-        legendCheck.value = 'show2020Data'+(i+1)
+        legendCheck.value = 'show2020Data'+(colors2020.length-i)
         legendCheck.checked = 'true'
 
-        this.checkedKeyValue['show2020Data'+(i+1)] = true
+        this.checkedKeyValue['show2020Data'+(colors2020.length-i)] = true
 
         legendCheck.onclick = function(e) {
           var keyName = this.value
@@ -80,7 +80,7 @@ var LegendControl = L.Control.extend({
 
         var legendTitle2020 = L.DomUtil.create('h4', 'legend-title is-inline');
         var weekNum = i + 2
-        legendTitle2020.textContent = lang.weeks2020[globalConfig.lang][i]//'2020년 3월 '+weekNum+'째주';
+        legendTitle2020.textContent = lang.weeks2020[globalConfig.lang][colors2020.length - 1 - i]//'2020년 3월 '+weekNum+'째주';
         wrapper.appendChild(legendBox2020)
         wrapper.appendChild(legendCheck)
         wrapper.appendChild(legendTitle2020)

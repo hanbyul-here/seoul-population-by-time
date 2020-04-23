@@ -299,11 +299,11 @@ layers:
                     return (feature.id + 1) ;
                   }
     time_2020_pop_1:
-        data: { source: tri_1 }
+        data: { source: tri_3 }
         enabled: global.show2020Data1
         draw:
             style2020_1:
-                order: 30
+                order: 32
                 color: '#f6e8c3'
                 extrude: |
                   function () {
@@ -321,11 +321,11 @@ layers:
                     return (feature.id + 1) ;
                     }
     time_2020_pop_3:
-        data: { source: tri_3 }
+        data: { source: tri_1 }
         enabled: global.show2020Data3
         draw:
             style2020_3:
-                order: 32
+                order: 30
                 color: '#a6611a'
                 extrude: |
                     function () {
