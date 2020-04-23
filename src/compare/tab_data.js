@@ -25,7 +25,7 @@ function getTabData() {
       value: e,
       displayText: labels[idx],
       files: dates.map(e => '/data/'+e+'/'+fileNames[idx]+'.json'),
-      sceneFile: '/compare-year/compare-'+e+'.yaml',
+      sceneFile: '/compare-years/compare-'+e+'.yaml',
       imagePath2019: '/data/20190304/' +imageNames[idx]+'.png',
       imagePath2020_1:'/data/20200302/' +imageNames[idx]+'.png',
       imagePath2020_2:'/data/20200309/' +imageNames[idx]+'.png',
