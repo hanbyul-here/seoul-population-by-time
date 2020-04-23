@@ -1,6 +1,6 @@
 # 서울생활인구지도 2019/2020 비교버전
 
-👉 [프로젝트 바로 가기](https://seoul-population-by-time.netlify.app/compare-year/)
+👉 [프로젝트 바로 가기](https://seoul-population-by-time.netlify.app/compare-years/)
 👉 [데이터 출처](http://data.seoul.go.kr/dataVisual/seoul/seoulLivingPopulation.do)
 
 이 프로젝트는 2019년 3월 2째주 서울 생활인구와 코로나 19가 발생한 이후인 2020년 3월 2,3,4째주 서울 생활인구를 비교, 시각화 한 프로젝트입니다.

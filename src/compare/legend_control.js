@@ -20,7 +20,7 @@ var LegendControl = L.Control.extend({
       titleH.textContent = lang.title[globalConfig.lang];
 
       var linkToGithub = L.DomUtil.create('a', 'github-link f-right')
-      linkToGithub.href = "https://github.com/hanbyul-here/seoul-population-by-time/tree/master/compare-year"
+      linkToGithub.href = "https://github.com/hanbyul-here/seoul-population-by-time/tree/master/compare-years"
       linkToGithub.title = lang.github[globalConfig.lang]
       var githubLogo = L.DomUtil.create('img')
       githubLogo.src = "/github-mark.png"
