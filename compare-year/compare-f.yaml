@@ -4,12 +4,12 @@
 textures:
     data_image:
         url: /data/20190304/female.png
-    data_2020_0309_image:
+    data_2020_1_image:
+        url: /data/20200302/female.png
+    data_2020_2_image:
         url: /data/20200309/female.png
-    data_2020_0316_image:
+    data_2020_3_image:
         url: /data/20200316/female.png
-    data_2020_0323_image:
-        url: /data/20200323/female.png
 global:
     show2019Data: true
     show2020Data1: true
@@ -123,7 +123,7 @@ styles:
             diffuse: 1.0
         shaders:
             uniforms:
-                u_data: data_2020_0309_image
+                u_data: data_2020_1_image
                 u_param: [168, 424]
                 u_offset: 0.
             blocks:
@@ -160,7 +160,7 @@ styles:
             diffuse: 1.0
         shaders:
             uniforms:
-                u_data: data_2020_0316_image
+                u_data: data_2020_2_image
                 u_param: [168, 424]
                 u_offset: 0.
             blocks:
@@ -197,7 +197,7 @@ styles:
             diffuse: 1.0
         shaders:
             uniforms:
-                u_data: data_2020_0323_image
+                u_data: data_2020_3_image
                 u_param: [168, 424]
                 u_offset: 0.
             blocks:

@@ -7,9 +7,9 @@ import {formatNumber} from './util'
 import lang from './lang'
 
 var date2019 = '20190304'
-var compareW2 = '20200309'
-var compareW3 = '20200316'
-var compareW4 = '20200323'
+var compareW2 = '20200302'
+var compareW3 = '20200309'
+var compareW4 = '20200316'
 var compares = [compareW2, compareW3, compareW4]
 
 window.selectedDongID = 200000;
