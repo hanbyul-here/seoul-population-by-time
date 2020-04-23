@@ -12,7 +12,8 @@ var compareW3 = '20200309'
 var compareW4 = '20200316'
 var compares = [compareW2, compareW3, compareW4]
 
-window.selectedDongID = 200000;
+var notPossibleIDNumber = 200000;
+window.selectedDongID = notPossibleIDNumber;
 
 function onTangramClick (selection) {
   if (selection.feature) {
@@ -25,7 +26,8 @@ function onTangramClick (selection) {
     window.selectedDongID = selection.feature.properties.id
     window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = window.selectedDongID
   } else {
-    window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = 2000000;
+    window.selectedDongID = notPossibleIDNumber
+    window.tangramLayer.scene.styles.hoverStyle.shaders.uniforms.u_offset = notPossibleIDNumber;
   }
 }
 

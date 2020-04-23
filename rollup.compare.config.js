@@ -1,7 +1,7 @@
 import { terser } from "rollup-plugin-terser";
 
 module.exports = {
-  input: 'src/compare/main.js',
+  input: 'compare-year/src/main.js',
   output: {
     file: 'compare-year/bundle.js',
     format: 'iife'
