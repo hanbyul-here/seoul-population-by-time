@@ -1,7 +1,7 @@
 import {formatNumber} from './util'
 import lang from './lang'
 
-const colors2020 = ['#a6611a', '#d8b365', '#f6e8c3']
+const colors2020 = ['#f6e8c3', '#d8b365', '#a6611a', ]
 
 var LegendControl = L.Control.extend({
     initialize: function(opts) {

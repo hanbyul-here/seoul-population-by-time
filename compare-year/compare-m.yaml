@@ -304,7 +304,7 @@ layers:
         draw:
             style2020_1:
                 order: 32
-                color: '#f6e8c3'
+                color: '#a6611a'
                 extrude: |
                   function () {
                     return (feature.id + 1) ;
@@ -326,7 +326,7 @@ layers:
         draw:
             style2020_3:
                 order: 30
-                color: '#a6611a'
+                color: '#f6e8c3'
                 extrude: |
                     function () {
                     return (feature.id + 1) ;
