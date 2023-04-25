@@ -23,6 +23,6 @@
   "devDependencies": {
     "install": "^0.13.0",
     "rollup": "^1.32.0",
-    "rollup-plugin-terser": "^5.3.0"
+    "rollup-plugin-terser": "^5.3.1"
   }
 }
